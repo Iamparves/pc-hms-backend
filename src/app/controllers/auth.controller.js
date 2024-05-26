@@ -107,6 +107,14 @@ export const login = catchAsync(async (req, res, next) => {
   return sendTokenResponse(user, 200, res);
 });
 
+export const logout = catchAsync(async (req, res) => {
+  res.clearCookie("jwt");
+
+  res
+    .status(200)
+    .json({ status: "success", message: "Logged out successfully!" });
+});
+
 export const verifyOTP = catchAsync(async (req, res, next) => {
   const { mobileNo, otp } = req.body;
 
