@@ -1,9 +1,10 @@
 import express from "express";
-import { signup, verifyOTP } from "../controllers/auth.controller.js";
+import { login, signup, verifyOTP } from "../controllers/auth.controller.js";
 
 const userRouter = express.Router();
 
 userRouter.post("/signup", signup);
+userRouter.post("/login", login);
 
 userRouter.patch("/verify-otp", verifyOTP);
 

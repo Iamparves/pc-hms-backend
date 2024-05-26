@@ -67,7 +67,7 @@ const userSchema = mongoose.Schema(
     verificationOTP: Number,
     verificationOTPExpires: Date,
     resetPasswordOTP: Number,
-    resetPasswordExpire: Date,
+    resetPasswordOTPExpires: Date,
     passwordChangedAt: Date,
   },
   {

@@ -5,6 +5,42 @@ import catchAsync from "../../utils/catchAsync.js";
 import filterObj from "../../utils/filterObj.js";
 import User from "../models/user.model.js";
 
+const signToken = (id) =>
+  jwt.sign({ id }, config.JWT_SECRET, {
+    expiresIn: config.JWT_EXPIRES_IN,
+  });
+
+const sendTokenResponse = (user, statusCode, res) => {
+  const token = signToken(user._id);
+
+  const cookieOptions = {
+    expires: new Date(
+      Date.now() + config.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000 // 90 days
+    ),
+    httpOnly: true,
+  };
+
+  if (config.NODE_ENV === "production") {
+    cookieOptions.secure = true;
+  }
+
+  res.cookie("jwt", token, cookieOptions);
+
+  user.password = undefined;
+  user.verificationOTP = undefined;
+  user.verificationOTPExpires = undefined;
+  user.resetPasswordOTP = undefined;
+  user.resetPasswordOTPExpires = undefined;
+
+  res.status(statusCode).json({
+    status: "success",
+    token, // remove this line later
+    data: {
+      user,
+    },
+  });
+};
+
 const sendVerificationOTP = async (user, req, res, next) => {
   const otp = await user.createVeificationOTP();
 
@@ -47,6 +83,28 @@ export const signup = catchAsync(async (req, res, next) => {
   }
 
   await sendVerificationOTP(newUser, req, res, next);
+});
+
+export const login = catchAsync(async (req, res, next) => {
+  const { mobileNo, password } = req.body;
+
+  if (!mobileNo || !password) {
+    return next(
+      new AppError("Please provide mobile number and password!", 400)
+    );
+  }
+
+  const user = await User.findOne({ mobileNo }).select("+password");
+
+  if (!user || !(await user.correctPassword(password, user.password))) {
+    return next(new AppError("Incorrect mobile number or password!", 401));
+  }
+
+  if (!user.isVerified) {
+    return next(new AppError("User not verified!", 401));
+  }
+
+  return sendTokenResponse(user, 200, res);
 });
 
 export const verifyOTP = catchAsync(async (req, res, next) => {
