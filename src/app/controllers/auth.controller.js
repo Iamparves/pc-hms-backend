@@ -1,3 +1,5 @@
+import jwt from "jsonwebtoken";
+import config from "../../config/index.js";
 import AppError from "../../utils/appError.js";
 import catchAsync from "../../utils/catchAsync.js";
 import filterObj from "../../utils/filterObj.js";
@@ -80,3 +82,46 @@ export const verifyOTP = catchAsync(async (req, res, next) => {
     isVerified: true,
   });
 });
+
+export const protect = catchAsync(async (req, res, next) => {
+  const token = req.cookies?.jwt;
+
+  if (!token) {
+    return next(
+      new AppError("You are not logged in! Please log in to get access.", 401)
+    );
+  }
+
+  const decoded = await promisify(jwt.verify)(token, config.JWT_SECRET);
+
+  const currentUser = await User.findById(decoded.id);
+
+  if (!currentUser) {
+    return next(
+      new AppError("The user belonging to this token no longer exists.", 401)
+    );
+  }
+
+  if (currentUser.changedPasswordAfter(decoded.iat)) {
+    return next(
+      new AppError("User recently changed password! Please log in again.", 401)
+    );
+  }
+
+  req.user = currentUser;
+  next();
+});
+
+export const restrictTo = (...roles) => {
+  return catchAsync(async (req, res, next) => {
+    const { role } = req.user;
+
+    if (!roles.includes(role)) {
+      return next(
+        new AppError("You do not have permission to perform this action", 403)
+      );
+    }
+
+    next();
+  });
+};
