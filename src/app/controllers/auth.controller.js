@@ -1,4 +1,5 @@
 import jwt from "jsonwebtoken";
+import { promisify } from "util";
 import config from "../../config/index.js";
 import AppError from "../../utils/appError.js";
 import catchAsync from "../../utils/catchAsync.js";
