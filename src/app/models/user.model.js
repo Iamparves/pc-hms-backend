@@ -1,3 +1,4 @@
+import bcrypt from "bcryptjs";
 import mongoose from "mongoose";
 import validator from "validator";
 
@@ -11,7 +12,6 @@ const userSchema = mongoose.Schema(
     email: {
       type: String,
       validate: [validator.isEmail, "Please provide a valid email address!"],
-      unique: [true, "Email already exists!"],
       trim: true,
       lowercase: true,
     },
@@ -57,9 +57,16 @@ const userSchema = mongoose.Schema(
     profileModel: {
       type: String,
       required: true,
-      enum: ["Patient", "Hospital"],
+      enum: ["Patient", "Hospital", "Admin"],
+      default: "Patient",
     },
-    resetPasswordOTP: String,
+    isVerified: {
+      type: Boolean,
+      default: false,
+    },
+    verificationOTP: Number,
+    verificationOTPExpires: Date,
+    resetPasswordOTP: Number,
     resetPasswordExpire: Date,
     passwordChangedAt: Date,
   },
@@ -75,7 +82,7 @@ userSchema.pre("save", async function (next) {
 
   this.password = await bcrypt.hash(this.password, 12);
 
-  this.passwordConfirm = undefined;
+  this.confirmPassword = undefined;
 
   if (this.isNew) return;
 
@@ -102,6 +109,17 @@ userSchema.methods.changedPasswordAfter = function (JWTTimestamp) {
 
   // False means NOT changed
   return false;
+};
+
+userSchema.methods.createVeificationOTP = async function () {
+  const otp = Math.floor(100000 + Math.random() * 900000);
+
+  this.verificationOTP = otp;
+  this.verificationOTPExpires = Date.now() + 10 * 60 * 1000; // 10 minutes
+
+  await this.save({ validateBeforeSave: false });
+
+  return otp;
 };
 
 const User = mongoose.model("User", userSchema);

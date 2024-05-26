@@ -3,6 +3,7 @@ import cors from "cors";
 import express from "express";
 import morgan from "morgan";
 import globalErrorHander from "./app/controllers/error.controller.js";
+import userRouter from "./app/routes/user.route.js";
 import config from "./config/index.js";
 import AppError from "./utils/appError.js";
 
@@ -22,6 +23,9 @@ if (config.NODE_ENV === "development") {
 app.use(express.json());
 app.use(cors());
 app.use(cookieParser());
+
+// Routes
+app.use("/api/v1/users", userRouter);
 
 app.get("/", (req, res) => {
   res.status(200).json({
