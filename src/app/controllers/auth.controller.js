@@ -37,6 +37,13 @@ export const signup = catchAsync(async (req, res, next) => {
 
   const newUser = await User.create(userData);
 
+  if (newUser.role === "admin") {
+    return res.status(201).json({
+      status: "success",
+      message: "Admin created successfully!",
+    });
+  }
+
   await sendVerificationOTP(newUser, req, res, next);
 });
 
@@ -47,6 +54,14 @@ export const verifyOTP = catchAsync(async (req, res, next) => {
 
   if (!user) {
     return next(new AppError("User not found!", 404));
+  }
+
+  if (user.isVerified) {
+    return next(new AppError("User already verified!", 400));
+  }
+
+  if (user.verificationOTPExpires < Date.now()) {
+    return next(new AppError("OTP expired! Please request a new OTP.", 400));
   }
 
   if (user.verificationOTP !== otp) {
