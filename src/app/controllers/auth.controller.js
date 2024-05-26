@@ -4,6 +4,7 @@ import config from "../../config/index.js";
 import AppError from "../../utils/appError.js";
 import catchAsync from "../../utils/catchAsync.js";
 import filterObj from "../../utils/filterObj.js";
+import Hospital from "../models/hospital.model.js";
 import User from "../models/user.model.js";
 
 const signToken = (id) =>
@@ -35,7 +36,6 @@ const sendTokenResponse = (user, statusCode, res) => {
 
   res.status(statusCode).json({
     status: "success",
-    token, // remove this line later
     data: {
       user,
     },
@@ -72,6 +72,13 @@ export const signup = catchAsync(async (req, res, next) => {
 
   if (userData.role === "hospital") {
     userData.profileModel = "Hospital";
+
+    const newHospital = await Hospital.create({
+      name: userData.name,
+      contactNumber: userData.mobileNo,
+    });
+
+    userData.profile = newHospital._id;
   }
 
   const newUser = await User.create(userData);
@@ -173,6 +180,10 @@ export const protect = catchAsync(async (req, res, next) => {
     return next(
       new AppError("User recently changed password! Please log in again.", 401)
     );
+  }
+
+  if (!currentUser.isVerified) {
+    return next(new AppError("User not verified!", 401));
   }
 
   req.user = currentUser;
