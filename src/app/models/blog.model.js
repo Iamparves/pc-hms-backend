@@ -83,15 +83,15 @@ blogSchema.methods.reaction = async function (userId, type) {
 
   const { liked, disliked } = reaction;
 
-  reaction.liked = type === "like";
-  reaction.disliked = type === "dislike";
+  reaction.liked = type === "like" && !liked;
+  reaction.disliked = type === "dislike" && !disliked;
 
   if (type === "like") {
     blog.reactions.dislike -= disliked ? 1 : 0;
-    blog.reactions.like += 1;
+    blog.reactions.like += liked ? -1 : 1;
   } else {
     blog.reactions.like -= liked ? 1 : 0;
-    blog.reactions.dislike += 1;
+    blog.reactions.dislike += disliked ? -1 : 1;
   }
 
   await reaction.save();
