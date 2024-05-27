@@ -17,6 +17,21 @@ export const createComment = catchAsync(async (req, res, next) => {
   });
 });
 
+export const getAllComments = catchAsync(async (req, res, next) => {
+  const comments = await Comment.find().populate({
+    path: "user",
+    select: "name",
+  });
+
+  res.status(200).json({
+    status: "success",
+    message: "Comments retrieved successfully",
+    data: {
+      comments,
+    },
+  });
+});
+
 export const getCommentsByBlog = catchAsync(async (req, res, next) => {
   const comments = await Comment.find({
     blog: req.params.blogId,
