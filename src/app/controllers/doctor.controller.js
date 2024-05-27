@@ -1,7 +1,9 @@
+import APIFeatures from "../../utils/apiFeatures.js";
 import AppError from "../../utils/appError.js";
 import catchAsync from "../../utils/catchAsync.js";
 import filterObj from "../../utils/filterObj.js";
 import Doctor from "../models/doctor.model.js";
+import Speciality, { getSpecialityIds } from "../models/speciality.model.js";
 
 export const createDoctor = catchAsync(async (req, res, next) => {
   const doctorData = filterObj(
@@ -27,7 +29,10 @@ export const createDoctor = catchAsync(async (req, res, next) => {
     "feesToShowReport"
   );
 
+  const specialityIds = await getSpecialityIds(doctorData.specialities);
+
   doctorData.hospital = req.user.profile;
+  doctorData.specialities = specialityIds;
 
   const doctor = await Doctor.create(doctorData);
 
@@ -41,7 +46,18 @@ export const createDoctor = catchAsync(async (req, res, next) => {
 });
 
 export const getAllDoctors = catchAsync(async (req, res, next) => {
-  const doctors = await Doctor.find();
+  const features = new APIFeatures(Doctor, req.query)
+    .filter()
+    .hospitalFilter()
+    .districtFilter()
+    .specialityFilter()
+    .dateFilter()
+    .nameFilter()
+    .sort()
+    .limitFields()
+    .paginate();
+
+  const doctors = await features.exec();
 
   return res.status(200).json({
     status: "success",
@@ -144,5 +160,18 @@ export const deleteDoctor = catchAsync(async (req, res, next) => {
     status: "success",
     message: "Doctor deleted successfully",
     data: null,
+  });
+});
+
+export const getSpecialities = catchAsync(async (req, res, next) => {
+  const specialities = await Speciality.find();
+
+  return res.status(200).json({
+    status: "success",
+    message: "Specialities found successfully",
+    results: specialities.length,
+    data: {
+      specialities,
+    },
   });
 });

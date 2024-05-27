@@ -5,10 +5,13 @@ import {
   deleteDoctor,
   getAllDoctors,
   getDoctorById,
+  getSpecialities,
   updateDoctor,
 } from "../controllers/doctor.controller.js";
 
 const doctorRouter = express.Router();
+
+doctorRouter.get("/specialities", getSpecialities);
 
 doctorRouter
   .route("/")

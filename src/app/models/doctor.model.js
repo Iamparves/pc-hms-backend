@@ -11,7 +11,12 @@ const doctorSchema = new mongoose.Schema(
     qualifications: String,
     about: String,
     specialities: {
-      type: [String],
+      type: [
+        {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Speciality",
+        },
+      ],
       validate: {
         validator: (value) => value && value.length > 0,
         message: "At least one speciality is required!",
