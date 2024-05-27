@@ -4,6 +4,7 @@ import express from "express";
 import morgan from "morgan";
 import globalErrorHander from "./app/controllers/error.controller.js";
 import appointmentRouter from "./app/routes/appointment.route.js";
+import blogRouter from "./app/routes/blog.route.js";
 import doctorRouter from "./app/routes/doctor.route.js";
 import hospitalRouter from "./app/routes/hospital.route.js";
 import noticeRouter from "./app/routes/notice.route.js";
@@ -34,6 +35,7 @@ app.use("/api/v1/hospitals", hospitalRouter);
 app.use("/api/v1/doctors", doctorRouter);
 app.use("/api/v1/appointments", appointmentRouter);
 app.use("/api/v1/notices", noticeRouter);
+app.use("/api/v1/blogs", blogRouter);
 
 app.get("/", (req, res) => {
   res.status(200).json({
