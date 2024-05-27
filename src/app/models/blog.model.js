@@ -1,4 +1,6 @@
 import mongoose from "mongoose";
+import AppError from "../../utils/appError.js";
+import BlogReactions from "./blogReactions.model.js";
 
 const blogSchema = mongoose.Schema(
   {
@@ -51,6 +53,52 @@ const blogSchema = mongoose.Schema(
     timestamps: true,
   }
 );
+
+blogSchema.methods.reaction = async function (userId, type) {
+  if (!["like", "dislike"].includes(type)) {
+    throw new AppError("Invalid reaction type", 400);
+  }
+
+  const blog = this;
+
+  const reaction = await BlogReactions.findOne({
+    blog: blog._id,
+    user: userId,
+  });
+
+  if (!reaction) {
+    blog.reactions[type] += 1;
+
+    await BlogReactions.create({
+      blog: blog._id,
+      user: userId,
+      liked: type === "like",
+      disliked: type === "dislike",
+    });
+
+    await blog.save();
+
+    return blog;
+  }
+
+  const { liked, disliked } = reaction;
+
+  reaction.liked = type === "like";
+  reaction.disliked = type === "dislike";
+
+  if (type === "like") {
+    blog.reactions.dislike -= disliked ? 1 : 0;
+    blog.reactions.like += 1;
+  } else {
+    blog.reactions.like -= liked ? 1 : 0;
+    blog.reactions.dislike += 1;
+  }
+
+  await reaction.save();
+  await blog.save();
+
+  return blog;
+};
 
 const Blog = mongoose.model("Blog", blogSchema);
 
