@@ -6,6 +6,7 @@ import globalErrorHander from "./app/controllers/error.controller.js";
 import appointmentRouter from "./app/routes/appointment.route.js";
 import doctorRouter from "./app/routes/doctor.route.js";
 import hospitalRouter from "./app/routes/hospital.route.js";
+import noticeRouter from "./app/routes/notice.route.js";
 import userRouter from "./app/routes/user.route.js";
 import config from "./config/index.js";
 import AppError from "./utils/appError.js";
@@ -32,6 +33,7 @@ app.use("/api/v1/users", userRouter);
 app.use("/api/v1/hospitals", hospitalRouter);
 app.use("/api/v1/doctors", doctorRouter);
 app.use("/api/v1/appointments", appointmentRouter);
+app.use("/api/v1/notices", noticeRouter);
 
 app.get("/", (req, res) => {
   res.status(200).json({
