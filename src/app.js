@@ -3,6 +3,7 @@ import cors from "cors";
 import express from "express";
 import morgan from "morgan";
 import globalErrorHander from "./app/controllers/error.controller.js";
+import appointmentRouter from "./app/routes/appointment.route.js";
 import doctorRouter from "./app/routes/doctor.route.js";
 import hospitalRouter from "./app/routes/hospital.route.js";
 import userRouter from "./app/routes/user.route.js";
@@ -30,6 +31,7 @@ app.use(cookieParser());
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/hospitals", hospitalRouter);
 app.use("/api/v1/doctors", doctorRouter);
+app.use("/api/v1/appointments", appointmentRouter);
 
 app.get("/", (req, res) => {
   res.status(200).json({
