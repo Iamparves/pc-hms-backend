@@ -80,8 +80,8 @@ class APIFeatures {
       this.pipeline.push({
         $match: {
           specialities: {
-            $in: specialitiesArray.map(
-              (id) => new mongoose.Schema.Types.ObjectId(id)
+            $in: specialitiesArray.map((id) =>
+              mongoose.Types.ObjectId.createFromHexString(id)
             ),
           },
         },
@@ -160,7 +160,6 @@ class APIFeatures {
   }
 
   async exec() {
-    console.log(this.pipeline);
     return await this.model.aggregate(this.pipeline);
   }
 }
