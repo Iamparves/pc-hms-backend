@@ -29,10 +29,6 @@ const sendTokenResponse = (user, statusCode, res) => {
   res.cookie("jwt", token, cookieOptions);
 
   user.password = undefined;
-  user.verificationOTP = undefined;
-  user.verificationOTPExpires = undefined;
-  user.resetPasswordOTP = undefined;
-  user.resetPasswordOTPExpires = undefined;
 
   res.status(statusCode).json({
     status: "success",
@@ -126,7 +122,9 @@ export const logout = catchAsync(async (req, res) => {
 export const verifyOTP = catchAsync(async (req, res, next) => {
   const { mobileNo, otp } = req.body;
 
-  const user = await User.findOne({ mobileNo });
+  const user = await User.findOne({ mobileNo }).select(
+    "+verificationOTP +verificationOTPExpires"
+  );
 
   if (!user) {
     return next(new AppError("User not found!", 404));

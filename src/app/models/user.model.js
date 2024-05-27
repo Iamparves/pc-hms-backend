@@ -31,6 +31,7 @@ const userSchema = mongoose.Schema(
       type: String,
       required: [true, "Password is required!"],
       minlength: [8, "Password must be at least 8 characters!"],
+      select: false,
     },
     confirmPassword: {
       type: String,
@@ -64,11 +65,26 @@ const userSchema = mongoose.Schema(
       type: Boolean,
       default: false,
     },
-    verificationOTP: Number,
-    verificationOTPExpires: Date,
-    resetPasswordOTP: Number,
-    resetPasswordOTPExpires: Date,
-    passwordChangedAt: Date,
+    verificationOTP: {
+      type: Number,
+      select: false,
+    },
+    verificationOTPExpires: {
+      type: Date,
+      select: false,
+    },
+    resetPasswordOTP: {
+      type: Number,
+      select: false,
+    },
+    resetPasswordOTPExpires: {
+      type: Date,
+      select: false,
+    },
+    passwordChangedAt: {
+      type: Date,
+      select: false,
+    },
   },
   {
     timestamps: true,

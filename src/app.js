@@ -5,6 +5,7 @@ import morgan from "morgan";
 import globalErrorHander from "./app/controllers/error.controller.js";
 import appointmentRouter from "./app/routes/appointment.route.js";
 import blogRouter from "./app/routes/blog.route.js";
+import commentRouter from "./app/routes/comment.route.js";
 import doctorRouter from "./app/routes/doctor.route.js";
 import hospitalRouter from "./app/routes/hospital.route.js";
 import noticeRouter from "./app/routes/notice.route.js";
@@ -36,11 +37,21 @@ app.use("/api/v1/doctors", doctorRouter);
 app.use("/api/v1/appointments", appointmentRouter);
 app.use("/api/v1/notices", noticeRouter);
 app.use("/api/v1/blogs", blogRouter);
+app.use("/api/v1/comments", commentRouter);
 
 app.get("/", (req, res) => {
   res.status(200).json({
     success: true,
     message: "Welcome to the API! 🚀",
+    collections: [
+      "/api/v1/users",
+      "/api/v1/hospitals",
+      "/api/v1/doctors",
+      "/api/v1/appointments",
+      "/api/v1/notices",
+      "/api/v1/blogs",
+      "/api/v1/comments",
+    ],
   });
 });
 

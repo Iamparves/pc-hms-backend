@@ -29,7 +29,10 @@ export const createNewBlog = catchAsync(async (req, res, next) => {
 export const getAllBlogs = catchAsync(async (req, res, next) => {
   const blogs = await Blog.find({
     status: "Published",
-  }).populate("author");
+  }).populate({
+    path: "author",
+    select: "name email",
+  });
 
   res.status(200).json({
     status: "success",
@@ -41,7 +44,10 @@ export const getAllBlogs = catchAsync(async (req, res, next) => {
 });
 
 export const getBlog = catchAsync(async (req, res, next) => {
-  const blog = await Blog.findById(req.params.blogId).populate("author");
+  const blog = await Blog.findById(req.params.blogId).populate({
+    path: "author",
+    select: "name email",
+  });
 
   if (!blog) {
     return next(new AppError("Blog not found", 404));
