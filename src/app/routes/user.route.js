@@ -3,10 +3,11 @@ import {
   login,
   logout,
   protect,
+  restrictTo,
   signup,
   verifyOTP,
 } from "../controllers/auth.controller.js";
-import { getMe } from "../controllers/user.controller.js";
+import { getMe, updateMe } from "../controllers/user.controller.js";
 
 const userRouter = express.Router();
 
@@ -17,5 +18,7 @@ userRouter.post("/login", login);
 userRouter.post("/logout", logout);
 
 userRouter.patch("/verify-otp", verifyOTP);
+
+userRouter.patch("/update-me", protect, restrictTo("patient"), updateMe);
 
 export default userRouter;
