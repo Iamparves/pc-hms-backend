@@ -60,7 +60,6 @@ export const createAdmin = catchAsync(async (req, res, next) => {
     "confirmPassword"
   );
   filteredBody.role = "admin";
-  filteredBody.profileModel = "Admin";
   filteredBody.isVerified = true;
 
   const user = await User.create(filteredBody);

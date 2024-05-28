@@ -48,7 +48,6 @@ const sendVerificationOTP = async (user, req, res, next) => {
   res.status(200).json({
     status: "success",
     message: `OTP sent to ${user.mobileNo}`,
-    otp,
   });
 };
 
@@ -61,11 +60,6 @@ export const signup = catchAsync(async (req, res, next) => {
     "confirmPassword",
     "role"
   );
-
-  if (userData.role === "admin") {
-    userData.isVerified = true;
-    userData.profileModel = "Admin";
-  }
 
   if (userData.role === "hospital") {
     userData.profileModel = "Hospital";
@@ -90,13 +84,6 @@ export const signup = catchAsync(async (req, res, next) => {
   }
 
   const newUser = await User.create(userData);
-
-  if (newUser.role === "admin") {
-    return res.status(201).json({
-      status: "success",
-      message: "Admin created successfully!",
-    });
-  }
 
   await sendVerificationOTP(newUser, req, res, next);
 });

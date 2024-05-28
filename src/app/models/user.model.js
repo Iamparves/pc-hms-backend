@@ -58,8 +58,8 @@ const userSchema = mongoose.Schema(
     profileModel: {
       type: String,
       required: true,
-      enum: ["Patient", "Hospital", "Admin"],
-      default: "Patient",
+      enum: ["Patient", "Hospital", null],
+      default: null,
     },
     isVerified: {
       type: Boolean,
