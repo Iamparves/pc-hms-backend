@@ -43,15 +43,6 @@ app.get("/", (req, res) => {
   res.status(200).json({
     success: true,
     message: "Welcome to the API! 🚀",
-    collections: [
-      "/api/v1/users",
-      "/api/v1/hospitals",
-      "/api/v1/doctors",
-      "/api/v1/appointments",
-      "/api/v1/notices",
-      "/api/v1/blogs",
-      "/api/v1/comments",
-    ],
   });
 });
 
