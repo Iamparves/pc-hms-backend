@@ -1,3 +1,4 @@
+import APIFeaturesQuery from "../../utils/apiFeaturesQuery.js";
 import catchAsync from "../../utils/catchAsync.js";
 import filterObj from "../../utils/filterObj.js";
 import Comment from "../models/comment.model.js";
@@ -18,10 +19,16 @@ export const createComment = catchAsync(async (req, res, next) => {
 });
 
 export const getAllComments = catchAsync(async (req, res, next) => {
-  const comments = await Comment.find().populate({
-    path: "user",
-    select: "name",
-  });
+  req.query.populate = "user:name";
+
+  const features = new APIFeaturesQuery(Comment.find(), req.query)
+    .filter()
+    .populate()
+    .sort()
+    .limitFields()
+    .paginate();
+
+  const comments = await features.query;
 
   res.status(200).json({
     status: "success",

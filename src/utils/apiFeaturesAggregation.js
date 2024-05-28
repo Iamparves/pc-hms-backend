@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-class APIFeatures {
+class APIFeaturesAggregation {
   constructor(model, queryString) {
     this.model = model;
     this.queryString = queryString;
@@ -14,7 +14,6 @@ class APIFeatures {
       "sort",
       "limit",
       "fields",
-      "search",
       "district",
       "hospital",
       "specialities",
@@ -164,4 +163,4 @@ class APIFeatures {
   }
 }
 
-export default APIFeatures;
+export default APIFeaturesAggregation;

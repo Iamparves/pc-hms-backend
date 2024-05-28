@@ -1,4 +1,4 @@
-import APIFeatures from "../../utils/apiFeatures.js";
+import APIFeaturesQuery from "../../utils/apiFeaturesQuery.js";
 import AppError from "../../utils/appError.js";
 import catchAsync from "../../utils/catchAsync.js";
 import filterObj from "../../utils/filterObj.js";
@@ -36,12 +36,13 @@ export const getAppointments = catchAsync(async (req, res, next) => {
     req.query.hospital = req.user.profile;
   }
 
-  const features = new APIFeatures(Appointment, req.query)
+  const features = new APIFeaturesQuery(Appointment.find(), req.query)
+    .filter()
     .sort()
     .limitFields()
     .paginate();
 
-  const appointments = await features.exec();
+  const appointments = await features.query;
 
   res.status(200).json({
     status: "success",

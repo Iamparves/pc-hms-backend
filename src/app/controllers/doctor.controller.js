@@ -1,4 +1,4 @@
-import APIFeatures from "../../utils/apiFeatures.js";
+import APIFeaturesAggregation from "../../utils/apiFeaturesAggregation.js";
 import AppError from "../../utils/appError.js";
 import catchAsync from "../../utils/catchAsync.js";
 import filterObj from "../../utils/filterObj.js";
@@ -46,7 +46,7 @@ export const createDoctor = catchAsync(async (req, res, next) => {
 });
 
 export const getAllDoctors = catchAsync(async (req, res, next) => {
-  const features = new APIFeatures(Doctor, req.query)
+  const features = new APIFeaturesAggregation(Doctor, req.query)
     .filter()
     .hospitalFilter()
     .districtFilter()

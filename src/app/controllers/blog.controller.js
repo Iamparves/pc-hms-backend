@@ -1,4 +1,4 @@
-import APIFeatures from "../../utils/apiFeatures.js";
+import APIFeaturesQuery from "../../utils/apiFeaturesQuery.js";
 import AppError from "../../utils/appError.js";
 import catchAsync from "../../utils/catchAsync.js";
 import filterObj from "../../utils/filterObj.js";
@@ -28,12 +28,16 @@ export const createNewBlog = catchAsync(async (req, res, next) => {
 });
 
 export const getAllBlogs = catchAsync(async (req, res, next) => {
-  const features = new APIFeatures(Blog.find(), req.query).filter().sort();
+  req.query.populate = "author:name|email";
 
-  const blogs = await features.query.populate({
-    path: "author",
-    select: "name email",
-  });
+  const features = new APIFeaturesQuery(Blog.find(), req.query)
+    .filter()
+    .populate()
+    .sort()
+    .limitFields()
+    .paginate();
+
+  const blogs = await features.query;
 
   res.status(200).json({
     status: "success",
