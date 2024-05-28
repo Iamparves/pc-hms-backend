@@ -5,6 +5,7 @@ import AppError from "../../utils/appError.js";
 import catchAsync from "../../utils/catchAsync.js";
 import filterObj from "../../utils/filterObj.js";
 import Hospital from "../models/hospital.model.js";
+import Patient from "../models/patient.model.js";
 import User from "../models/user.model.js";
 
 const signToken = (id) =>
@@ -75,6 +76,17 @@ export const signup = catchAsync(async (req, res, next) => {
     });
 
     userData.profile = newHospital._id;
+  }
+
+  if (userData.role === "patient") {
+    userData.profileModel = "Patient";
+
+    const newPatient = await Patient.create({
+      name: userData.name,
+      contactNumber: userData.mobileNo,
+    });
+
+    userData.profile = newPatient._id;
   }
 
   const newUser = await User.create(userData);

@@ -1,4 +1,6 @@
 import catchAsync from "../../utils/catchAsync.js";
+import filterObj from "../../utils/filterObj.js";
+import Patient from "../models/patient.model.js";
 import User from "../models/user.model.js";
 
 export const getMe = catchAsync(async (req, res, next) => {
@@ -9,6 +11,40 @@ export const getMe = catchAsync(async (req, res, next) => {
 
   res.status(200).json({
     status: "success",
+    data: {
+      user,
+    },
+  });
+});
+
+export const updateMe = catchAsync(async (req, res, next) => {
+  const filteredBody = filterObj(
+    req.body,
+    "name",
+    "photo",
+    "age",
+    "gender",
+    "bloodGroup",
+    "address"
+  );
+
+  const filteredUser = filterObj(req.body, "name", "email");
+
+  const user = await Patient.findByIdAndUpdate(req.user._id, filteredBody, {
+    new: true,
+    runValidators: true,
+  });
+
+  if (filteredUser.name || filteredUser.email) {
+    await User.findByIdAndUpdate(req.user._id, filteredUser, {
+      new: true,
+      runValidators: true,
+    });
+  }
+
+  res.status(200).json({
+    status: "success",
+    message: "User updated successfully",
     data: {
       user,
     },

@@ -1,3 +1,4 @@
+import APIFeaturesQuery from "../../utils/apiFeaturesQuery.js";
 import AppError from "../../utils/appError.js";
 import catchAsync from "../../utils/catchAsync.js";
 import filterObj from "../../utils/filterObj.js";
@@ -26,7 +27,13 @@ export const createNewNotice = catchAsync(async (req, res, next) => {
 });
 
 export const getAllNotices = catchAsync(async (req, res, next) => {
-  const notices = await Notice.find();
+  const features = new APIFeaturesQuery(Notice.find(), req.query)
+    .filter()
+    .sort()
+    .limitFields()
+    .paginate();
+
+  const notices = await features.query;
 
   res.status(200).json({
     status: "success",

@@ -2,6 +2,7 @@ import APIFeaturesQuery from "../../utils/apiFeaturesQuery.js";
 import catchAsync from "../../utils/catchAsync.js";
 import filterObj from "../../utils/filterObj.js";
 import Hospital from "../models/hospital.model.js";
+import User from "../models/user.model.js";
 
 export const updateHospital = catchAsync(async (req, res, next) => {
   const hospitalId = req.user.profile;
@@ -21,6 +22,17 @@ export const updateHospital = catchAsync(async (req, res, next) => {
     new: true,
     runValidators: true,
   });
+
+  if (hospitalData.name) {
+    await User.findByIdAndUpdate(
+      req.user._id,
+      { name: hospitalData.name },
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
+  }
 
   res.status(200).json({
     status: "success",
@@ -45,6 +57,22 @@ export const getHospitals = catchAsync(async (req, res, next) => {
     message: "Hospitals fetched successfully",
     data: {
       hospitals,
+    },
+  });
+});
+
+export const getHospitalById = catchAsync(async (req, res, next) => {
+  const hospital = await Hospital.findById(req.params.hospitalId);
+
+  if (!hospital) {
+    return next(new AppError("Hospital not found", 404));
+  }
+
+  res.status(200).json({
+    status: "success",
+    message: "Hospital retrieved successfully",
+    data: {
+      hospital,
     },
   });
 });
