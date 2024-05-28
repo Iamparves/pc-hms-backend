@@ -50,3 +50,26 @@ export const updateMe = catchAsync(async (req, res, next) => {
     },
   });
 });
+
+export const createAdmin = catchAsync(async (req, res, next) => {
+  const filteredBody = filterObj(
+    req.body,
+    "name",
+    "mobileNo",
+    "password",
+    "confirmPassword"
+  );
+  filteredBody.role = "admin";
+  filteredBody.profileModel = "Admin";
+  filteredBody.isVerified = true;
+
+  const user = await User.create(filteredBody);
+
+  return res.status(201).json({
+    status: "success",
+    message: "Admin created successfully",
+    data: {
+      user,
+    },
+  });
+});
