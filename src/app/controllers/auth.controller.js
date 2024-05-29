@@ -45,6 +45,7 @@ const sendVerificationOTP = async (user, req, res, next) => {
   // Send response
   res.status(200).json({
     status: "success",
+    mobileNo: user.mobileNo,
     message: `OTP sent to ${user.mobileNo}`,
   });
 };
