@@ -17,15 +17,13 @@ const sendTokenResponse = (user, statusCode, res) => {
   const token = signToken(user._id);
 
   const cookieOptions = {
-    expires: new Date(
-      Date.now() + config.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000 // 90 days
-    ),
     httpOnly: true,
+    secure: config.NODE_ENV === "production",
+    sameSite: "None",
+    maxAge: new Date(
+      config.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000 // 90 days
+    ),
   };
-
-  if (config.NODE_ENV === "production") {
-    cookieOptions.secure = true;
-  }
 
   res.cookie("jwt", token, cookieOptions);
 

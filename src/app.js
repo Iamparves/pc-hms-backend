@@ -27,9 +27,8 @@ if (config.NODE_ENV === "development") {
 }
 
 const corsOptions = {
-  origin: ["http://localhost:5173/", config.CLIENT_URL],
+  origin: config.CLIENT_URL,
   credentials: true,
-  allowedHeaders: ["Content-Type", "Authorization"],
 };
 
 app.use(cors(corsOptions));
