@@ -26,9 +26,15 @@ if (config.NODE_ENV === "development") {
   app.use(morgan("dev"));
 }
 
-app.use(express.json());
-app.use(cors());
+const corsOptions = {
+  origin: ["http://localhost:5173/", config.CLIENT_URL],
+  credentials: true,
+  allowedHeaders: ["Content-Type", "Authorization"],
+};
+
+app.use(cors(corsOptions));
 app.use(cookieParser());
+app.use(express.json());
 
 // Routes
 app.use("/api/v1/users", userRouter);
