@@ -5,8 +5,6 @@ import Hospital from "../models/hospital.model.js";
 import User from "../models/user.model.js";
 
 export const updateHospital = catchAsync(async (req, res, next) => {
-  const hospitalId = req.user.profile;
-
   const hospitalData = filterObj(
     req.body,
     "name",
@@ -15,10 +13,11 @@ export const updateHospital = catchAsync(async (req, res, next) => {
     "email",
     "photo",
     "description",
-    "website"
+    "website",
+    "contactNo"
   );
 
-  const hospital = await Hospital.findByIdAndUpdate(hospitalId, hospitalData, {
+  await Hospital.findByIdAndUpdate(req.user.profile, hospitalData, {
     new: true,
     runValidators: true,
   });
@@ -34,11 +33,16 @@ export const updateHospital = catchAsync(async (req, res, next) => {
     );
   }
 
+  const user = await User.findById(req.user._id).populate({
+    path: "profile",
+    select: "-__v -createdAt -updatedAt",
+  });
+
   res.status(200).json({
     status: "success",
     message: "Hospital updated successfully!",
     data: {
-      hospital,
+      user,
     },
   });
 });
