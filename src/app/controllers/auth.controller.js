@@ -221,6 +221,8 @@ export const updatePassword = catchAsync(async (req, res, next) => {
   user.confirmPassword = confirmNewPassword;
   await user.save();
 
+  res.clearCookie("jwt");
+
   return res.status(200).json({
     status: "success",
     message: "Password changed successfully!",
