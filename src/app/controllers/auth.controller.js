@@ -199,3 +199,30 @@ export const restrictTo = (...roles) => {
     next();
   });
 };
+
+export const updatePassword = catchAsync(async (req, res, next) => {
+  const { currentPassword, newPassword, confirmNewPassword } = req.body;
+  const user = await User.findById(req.user._id).select("+password");
+
+  if (!currentPassword || !newPassword || !confirmNewPassword) {
+    return next(
+      new AppError(
+        "Please provide your current password and new password and confirm new password",
+        400
+      )
+    );
+  }
+
+  if (!(await user.correctPassword(currentPassword, user.password))) {
+    return next(new AppError("Your provided current password is wrong.", 401));
+  }
+
+  user.password = newPassword;
+  user.confirmPassword = confirmNewPassword;
+  await user.save();
+
+  return res.status(200).json({
+    status: "success",
+    message: "Password changed successfully!",
+  });
+});

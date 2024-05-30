@@ -5,6 +5,7 @@ import {
   protect,
   restrictTo,
   signup,
+  updatePassword,
   verifyOTP,
 } from "../controllers/auth.controller.js";
 import {
@@ -24,5 +25,6 @@ userRouter.post("/create-admin", protect, restrictTo("admin"), createAdmin);
 
 userRouter.patch("/verify-otp", verifyOTP);
 userRouter.patch("/update-me", protect, restrictTo("patient"), updateMe);
+userRouter.patch("/update-password", protect, updatePassword);
 
 export default userRouter;
