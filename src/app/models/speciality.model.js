@@ -16,7 +16,10 @@ export const getSpecialityIds = async function (specialities) {
 
   await Promise.all(
     specialities.map(async (name) => {
-      const existingSpeciality = await Speciality.findOne({ name });
+      const existingSpeciality = await Speciality.findOne({
+        name: new RegExp(`^${name}$`, "i"),
+      });
+
       if (!existingSpeciality) {
         const newSpeciality = await Speciality.create({ name });
         newSpecialities.push(newSpeciality._id);

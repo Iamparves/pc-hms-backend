@@ -96,7 +96,10 @@ export const login = catchAsync(async (req, res, next) => {
     );
   }
 
-  const user = await User.findOne({ mobileNo }).select("+password");
+  const user = await User.findOne({ mobileNo }).select("+password").populate({
+    path: "profile",
+    select: "-__v -createdAt -updatedAt",
+  });
 
   if (!user || !(await user.correctPassword(password, user.password))) {
     return next(new AppError("Incorrect mobile number or password!", 401));
