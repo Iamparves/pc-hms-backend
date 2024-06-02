@@ -4,6 +4,7 @@ import config from "../../config/index.js";
 import AppError from "../../utils/appError.js";
 import catchAsync from "../../utils/catchAsync.js";
 import filterObj from "../../utils/filterObj.js";
+import { sendSms } from "../../utils/sendSms.js";
 import Hospital from "../models/hospital.model.js";
 import Patient from "../models/patient.model.js";
 import User from "../models/user.model.js";
@@ -41,13 +42,35 @@ const sendVerificationOTP = async (user, req, res, next) => {
   const otp = await user.createVeificationOTP();
 
   // Send OTP to user's mobile number
+  const message = `Your Patientoo verification code is ${otp}. This code will expire in 10 minutes.`;
 
-  // Send response
-  res.status(200).json({
-    status: "success",
-    mobileNo: user.mobileNo,
-    message: `OTP sent to ${user.mobileNo}`,
-  });
+  try {
+    const result = await sendSms(user.mobileNo, message);
+
+    if (result.success_message) {
+      return res.status(200).json({
+        status: "success",
+        mobileNo: user.mobileNo,
+        message: `OTP sent to ${user.mobileNo}`,
+      });
+    } else {
+      return next(
+        new AppError(
+          result.error_message || "There was an error sending the OTP.",
+          500
+        )
+      );
+    }
+  } catch (error) {
+    console.log(error);
+
+    return next(
+      new AppError(
+        "There was an error sending the OTP. Please try again later!",
+        500
+      )
+    );
+  }
 };
 
 export const signup = catchAsync(async (req, res, next) => {
