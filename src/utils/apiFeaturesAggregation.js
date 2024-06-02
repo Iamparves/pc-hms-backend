@@ -74,15 +74,13 @@ class APIFeaturesAggregation {
 
   specialityFilter() {
     if (this.queryString.specialities) {
-      const specialitiesArray = this.queryString.specialities.split(",");
+      const specialitiesArray = this.queryString.specialities
+        .split(",")
+        .map((s) => mongoose.Types.ObjectId.createFromHexString(s));
 
       this.pipeline.push({
         $match: {
-          specialities: {
-            $in: specialitiesArray.map((id) =>
-              mongoose.Types.ObjectId.createFromHexString(id)
-            ),
-          },
+          "specialities._id": { $in: specialitiesArray },
         },
       });
     }
