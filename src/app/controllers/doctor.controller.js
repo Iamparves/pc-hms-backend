@@ -156,7 +156,7 @@ export const deleteDoctor = catchAsync(async (req, res, next) => {
 
   await Doctor.findByIdAndDelete(req.params.doctorId);
 
-  return res.status(204).json({
+  return res.status(200).json({
     status: "success",
     message: "Doctor deleted successfully",
     data: null,

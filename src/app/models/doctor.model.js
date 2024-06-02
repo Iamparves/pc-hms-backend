@@ -55,6 +55,17 @@ const doctorSchema = new mongoose.Schema(
   }
 );
 
+doctorSchema.pre("aggregate", function () {
+  this.pipeline().unshift({
+    $lookup: {
+      from: "specialities",
+      localField: "specialities",
+      foreignField: "_id",
+      as: "specialities",
+    },
+  });
+});
+
 const Doctor = mongoose.model("Doctor", doctorSchema);
 
 export default Doctor;
