@@ -5,6 +5,7 @@ import {
   deleteDoctor,
   getAllDoctors,
   getDoctorById,
+  getHospitalDoctors,
   getSpecialities,
   updateDoctor,
 } from "../controllers/doctor.controller.js";
@@ -12,6 +13,13 @@ import {
 const doctorRouter = express.Router();
 
 doctorRouter.get("/specialities", getSpecialities);
+
+doctorRouter.get(
+  "/my-doctors",
+  protect,
+  restrictTo("hospital"),
+  getHospitalDoctors
+);
 
 doctorRouter
   .route("/")

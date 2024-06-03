@@ -55,10 +55,6 @@ const doctorSchema = new mongoose.Schema(
   }
 );
 
-doctorSchema.pre(/^find/, function () {
-  this.populate("specialities").populate("hospital");
-});
-
 doctorSchema.pre("aggregate", function () {
   this.pipeline().unshift({
     $lookup: {

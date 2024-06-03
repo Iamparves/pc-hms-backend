@@ -40,7 +40,8 @@ export const getAppointments = catchAsync(async (req, res, next) => {
     .filter()
     .sort()
     .limitFields()
-    .paginate();
+    .paginate()
+    .populate();
 
   const appointments = await features.query;
 
