@@ -112,6 +112,13 @@ export const updateDoctor = catchAsync(async (req, res, next) => {
     "feesToShowReport"
   );
 
+  console.log();
+
+  if (doctorData.specialities) {
+    const specialityIds = await getSpecialityIds(doctorData.specialities);
+    doctorData.specialities = specialityIds;
+  }
+
   const doctor = await Doctor.findById(req.params.doctorId);
 
   if (!doctor) {
