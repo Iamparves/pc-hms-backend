@@ -30,7 +30,7 @@ export const updateMe = catchAsync(async (req, res, next) => {
 
   const filteredUser = filterObj(req.body, "name", "email");
 
-  const user = await Patient.findByIdAndUpdate(req.user.profile, filteredBody, {
+  await Patient.findByIdAndUpdate(req.user.profile, filteredBody, {
     new: true,
     runValidators: true,
   });
@@ -41,6 +41,11 @@ export const updateMe = catchAsync(async (req, res, next) => {
       runValidators: true,
     });
   }
+
+  const user = await User.findById(req.user._id).populate({
+    path: "profile",
+    select: "-__v -createdAt -updatedAt",
+  });
 
   res.status(200).json({
     status: "success",

@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import AppError from "../../utils/appError.js";
+import generateDayId from "../../utils/generateDayId.js";
 import Doctor from "./doctor.model.js";
 import Hospital from "./hospital.model.js";
 
@@ -50,7 +51,7 @@ appointmentSchema.pre("save", async function (next) {
 
   const date = new Date(appointment.appointmentDate);
 
-  const dayId = `${date.getDate()}${date.getMonth() + 1}${date.getFullYear()}`;
+  const dayId = generateDayId(date);
   appointment.dayId = dayId;
 
   const doctorExists = await Doctor.exists({ _id: appointment.doctor });
