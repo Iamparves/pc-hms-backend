@@ -31,8 +31,8 @@ const noticeSchema = mongoose.Schema(
     audience: {
       type: [String],
       required: true,
-      enum: ["Patient", "Hospital", "All"],
-      default: "All",
+      enum: ["patient", "hospital", "all"],
+      default: "all",
     },
   },
   {

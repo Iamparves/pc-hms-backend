@@ -113,13 +113,14 @@ export const getAdmins = catchAsync(async (req, res, next) => {
 });
 
 export const deleteAdmin = catchAsync(async (req, res, next) => {
+  if (req.user._id === req.params.adminId) {
+    return next(new AppError("You can't delete yourself", 400));
+  }
+
   const user = await User.findByIdAndDelete(req.params.adminId);
 
   if (!user) {
-    return res.status(404).json({
-      status: "fail",
-      message: "Admin not found",
-    });
+    return next(new AppError("Admin not found", 404));
   }
 
   return res.status(200).json({

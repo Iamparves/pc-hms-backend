@@ -60,7 +60,6 @@ const userSchema = mongoose.Schema(
     },
     profileModel: {
       type: String,
-      required: true,
       enum: ["Patient", "Hospital", null],
       default: null,
     },
