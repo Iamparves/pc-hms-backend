@@ -13,6 +13,7 @@ import {
   deleteAdmin,
   getAdmins,
   getMe,
+  updateAdmin,
   updateMe,
 } from "../controllers/user.controller.js";
 
@@ -29,7 +30,10 @@ userRouter
   .get(getAdmins)
   .post(createAdmin);
 
-userRouter.delete("/admin/:adminId", protect, restrictTo("admin"), deleteAdmin);
+userRouter
+  .route("/admin/:adminId", protect, restrictTo("admin"))
+  .patch(updateAdmin)
+  .delete(deleteAdmin);
 
 userRouter.patch("/verify-otp", verifyOTP);
 userRouter.patch("/update-me", protect, restrictTo("patient"), updateMe);

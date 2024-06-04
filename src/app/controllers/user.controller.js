@@ -1,3 +1,4 @@
+import AppError from "../../utils/appError.js";
 import catchAsync from "../../utils/catchAsync.js";
 import filterObj from "../../utils/filterObj.js";
 import Patient from "../models/patient.model.js";
@@ -72,6 +73,27 @@ export const createAdmin = catchAsync(async (req, res, next) => {
   return res.status(201).json({
     status: "success",
     message: "Admin created successfully",
+    data: {
+      user,
+    },
+  });
+});
+
+export const updateAdmin = catchAsync(async (req, res, next) => {
+  const filteredBody = filterObj(req.body, "name", "email");
+
+  const user = await User.findByIdAndUpdate(req.params.adminId, filteredBody, {
+    new: true,
+    runValidators: true,
+  });
+
+  if (!user) {
+    return next(new AppError("Admin not found", 404));
+  }
+
+  return res.status(200).json({
+    status: "success",
+    message: "Admin updated successfully",
     data: {
       user,
     },
