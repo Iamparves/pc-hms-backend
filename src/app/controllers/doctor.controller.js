@@ -58,13 +58,17 @@ export const getAllDoctors = catchAsync(async (req, res, next) => {
     .limitFields()
     .paginate();
 
-  const doctors = await features.exec();
+  const result = await features.exec();
+
+  const totalDocs = result[0]?.totalDocs[0]?.count || 0;
+  const doctors = result[0]?.paginatedResults || [];
 
   return res.status(200).json({
     status: "success",
     message: "Doctors found successfully",
     results: doctors.length,
     data: {
+      totalDocs,
       doctors,
     },
   });
@@ -111,8 +115,6 @@ export const updateDoctor = catchAsync(async (req, res, next) => {
     "phone",
     "feesToShowReport"
   );
-
-  console.log();
 
   if (doctorData.specialities) {
     const specialityIds = await getSpecialityIds(doctorData.specialities);

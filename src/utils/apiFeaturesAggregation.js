@@ -148,10 +148,26 @@ class APIFeaturesAggregation {
 
   paginate() {
     const page = this.queryString.page * 1 || 1;
-    const limit = this.queryString.limit * 1 || 100;
+    const limit = this.queryString.limit * 1 || 10;
     const skip = (page - 1) * limit;
 
-    this.pipeline.push({ $skip: skip }, { $limit: limit });
+    this.pipeline.push({
+      $facet: {
+        totalDocs: [
+          {
+            $count: "count",
+          },
+        ],
+        paginatedResults: [
+          {
+            $skip: skip,
+          },
+          {
+            $limit: limit,
+          },
+        ],
+      },
+    });
 
     return this;
   }
