@@ -77,3 +77,31 @@ export const createAdmin = catchAsync(async (req, res, next) => {
     },
   });
 });
+
+export const getAdmins = catchAsync(async (req, res, next) => {
+  const admins = await User.find({ role: "admin" });
+
+  return res.status(200).json({
+    status: "success",
+    message: "Admins fetched successfully",
+    data: {
+      admins,
+    },
+  });
+});
+
+export const deleteAdmin = catchAsync(async (req, res, next) => {
+  const user = await User.findByIdAndDelete(req.params.adminId);
+
+  if (!user) {
+    return res.status(404).json({
+      status: "fail",
+      message: "Admin not found",
+    });
+  }
+
+  return res.status(200).json({
+    status: "success",
+    message: "Admin deleted successfully",
+  });
+});
