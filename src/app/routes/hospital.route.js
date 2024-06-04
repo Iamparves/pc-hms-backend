@@ -1,6 +1,7 @@
 import express from "express";
 import { protect, restrictTo } from "../controllers/auth.controller.js";
 import {
+  getAdminHospitals,
   getHospitalById,
   getHospitals,
   updateHospital,
@@ -9,6 +10,8 @@ import {
 const hospitalRouter = express.Router();
 
 hospitalRouter.get("/", getHospitals);
+
+hospitalRouter.get("/admin", protect, restrictTo("admin"), getAdminHospitals);
 hospitalRouter.patch("/", protect, restrictTo("hospital"), updateHospital);
 
 hospitalRouter.route("/:hospitalId").get(getHospitalById);

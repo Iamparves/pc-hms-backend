@@ -65,6 +65,37 @@ export const getHospitals = catchAsync(async (req, res, next) => {
   });
 });
 
+export const getAdminHospitals = catchAsync(async (req, res, next) => {
+  const hospitals = await Hospital.aggregate([
+    {
+      $lookup: {
+        from: "doctors",
+        localField: "_id",
+        foreignField: "hospital",
+        as: "doctors",
+      },
+    },
+    {
+      $project: {
+        name: 1,
+        address: 1,
+        district: 1,
+        email: 1,
+        contactNumber: 1,
+        doctorsCount: { $size: "$doctors" },
+      },
+    },
+  ]);
+
+  res.status(200).json({
+    status: "success",
+    message: "Hospitals fetched successfully",
+    data: {
+      hospitals,
+    },
+  });
+});
+
 export const getHospitalById = catchAsync(async (req, res, next) => {
   const hospital = await Hospital.findById(req.params.hospitalId);
 
