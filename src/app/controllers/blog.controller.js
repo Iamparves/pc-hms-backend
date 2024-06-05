@@ -12,17 +12,23 @@ export const createNewBlog = catchAsync(async (req, res, next) => {
     "title",
     "content",
     "publishedDate",
-    "categories",
+    "tags",
     "featuredImage",
     "status"
   );
+
   blogData.author = req.user._id;
 
   const newBlog = await Blog.create(blogData);
 
+  const message =
+    blogData.status === "Draft"
+      ? "Blog saved successfully"
+      : "Blog published successfully";
+
   res.status(201).json({
     status: "success",
-    message: "New blog created successfully",
+    message,
     data: {
       blog: newBlog,
     },
@@ -75,7 +81,7 @@ export const updateBlog = catchAsync(async (req, res, next) => {
     "title",
     "content",
     "publishedDate",
-    "categories",
+    "tags",
     "featuredImage",
     "status"
   );
