@@ -3,6 +3,8 @@ import AppError from "../../utils/appError.js";
 import catchAsync from "../../utils/catchAsync.js";
 import filterObj from "../../utils/filterObj.js";
 import Blog from "../models/blog.model.js";
+import BlogReactions from "../models/blogReactions.model.js";
+import Comment from "../models/comment.model.js";
 
 export const createNewBlog = catchAsync(async (req, res, next) => {
   const blogData = filterObj(
@@ -122,6 +124,8 @@ export const deleteBlog = catchAsync(async (req, res, next) => {
   }
 
   await Blog.findByIdAndDelete(req.params.blogId);
+  await BlogReactions.deleteMany({ blog: req.params.blogId });
+  await Comment.deleteMany({ blog: req.params.blogId });
 
   res.status(204).json({
     status: "success",
