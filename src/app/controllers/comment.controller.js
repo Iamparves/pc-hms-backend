@@ -1,11 +1,13 @@
 import APIFeaturesQuery from "../../utils/apiFeaturesQuery.js";
 import catchAsync from "../../utils/catchAsync.js";
-import filterObj from "../../utils/filterObj.js";
 import Comment from "../models/comment.model.js";
 
 export const createComment = catchAsync(async (req, res, next) => {
-  const commentData = filterObj(req.body, "content", "blog");
-  commentData.user = req.user._id;
+  const commentData = {
+    content: req.body.content,
+    blog: req.body.blog,
+    user: req.user._id,
+  };
 
   const newComment = await Comment.create(commentData);
 
@@ -73,7 +75,9 @@ export const updateComment = catchAsync(async (req, res, next) => {
     );
   }
 
-  const commentData = filterObj(req.body, "content");
+  const commentData = {
+    content: req.body.content,
+  };
 
   const updatedComment = await Comment.findByIdAndUpdate(
     req.params.commentId,
