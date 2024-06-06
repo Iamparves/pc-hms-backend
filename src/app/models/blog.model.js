@@ -36,6 +36,15 @@ const blogSchema = mongoose.Schema(
       required: true,
       default: "Draft",
     },
+    postedBy: {
+      type: String,
+      required: true,
+      enum: {
+        values: ["admin", "hospital"],
+        message: "Posted by can either be admin or hospital",
+      },
+      default: "admin",
+    },
     reactions: {
       like: {
         type: Number,

@@ -5,12 +5,15 @@ import {
   deleteBlog,
   dislikeBlog,
   getAllBlogs,
+  getAllTags,
   getBlog,
   likeBlog,
   updateBlog,
 } from "../controllers/blog.controller.js";
 
 const blogRouter = express.Router();
+
+blogRouter.get("/tags", getAllTags);
 
 blogRouter.patch("/:blogId/like", protect, likeBlog);
 blogRouter.patch("/:blogId/dislike", protect, dislikeBlog);

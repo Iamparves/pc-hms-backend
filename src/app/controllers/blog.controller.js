@@ -18,6 +18,7 @@ export const createNewBlog = catchAsync(async (req, res, next) => {
   );
 
   blogData.author = req.user._id;
+  blogData.postedBy = req.user.role;
 
   const newBlog = await Blog.create(blogData);
 
@@ -92,7 +93,10 @@ export const updateBlog = catchAsync(async (req, res, next) => {
     return next(new AppError("Blog not found", 404));
   }
 
-  if (req.user.role === "hospital" && blog.author.toString() !== req.user._id) {
+  if (
+    (req.user.role === "hospital" && blog.author.toString() !== req.user._id) ||
+    (req.user.role === "admin" && blog.postedBy === "hospital")
+  ) {
     return next(
       new AppError("You are not authorized to update this blog", 403)
     );
@@ -123,7 +127,10 @@ export const deleteBlog = catchAsync(async (req, res, next) => {
     return next(new AppError("Blog not found", 404));
   }
 
-  if (req.user.role === "hospital" && blog.author.toString() !== req.user._id) {
+  if (
+    (req.user.role === "hospital" && blog.author.toString() !== req.user._id) ||
+    (req.user.role === "admin" && blog.postedBy === "hospital")
+  ) {
     return next(
       new AppError("You are not authorized to delete this blog", 403)
     );
@@ -133,7 +140,7 @@ export const deleteBlog = catchAsync(async (req, res, next) => {
   await BlogReactions.deleteMany({ blog: req.params.blogId });
   await Comment.deleteMany({ blog: req.params.blogId });
 
-  res.status(204).json({
+  res.status(200).json({
     status: "success",
     message: "Blog deleted successfully",
     data: null,
@@ -167,5 +174,23 @@ export const dislikeBlog = catchAsync(async (req, res, next) => {
   res.status(200).json({
     status: "success",
     data: null,
+  });
+});
+
+export const getAllTags = catchAsync(async (req, res, next) => {
+  const uniqueTags = await Blog.aggregate([
+    { $unwind: "$tags" },
+    { $group: { _id: null, uniqueTags: { $addToSet: "$tags" } } },
+    { $project: { _id: 0, uniqueTags: 1 } },
+  ]);
+
+  const tags = uniqueTags[0]?.uniqueTags || [];
+
+  res.status(200).json({
+    status: "success",
+    message: "Tags fetched successfully",
+    data: {
+      tags,
+    },
   });
 });
