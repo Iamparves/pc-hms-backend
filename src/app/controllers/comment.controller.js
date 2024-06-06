@@ -1,4 +1,5 @@
 import APIFeaturesQuery from "../../utils/apiFeaturesQuery.js";
+import AppError from "../../utils/appError.js";
 import catchAsync from "../../utils/catchAsync.js";
 import Comment from "../models/comment.model.js";
 
@@ -44,14 +45,12 @@ export const getAllComments = catchAsync(async (req, res, next) => {
 export const getCommentsByBlog = catchAsync(async (req, res, next) => {
   const comments = await Comment.find({
     blog: req.params.blogId,
-  }).populate({
-    path: "user",
-    select: "name",
-  });
-
-  if (!comments) {
-    return next(new AppError("Comments not found", 404));
-  }
+  })
+    .sort("-createdAt")
+    .populate({
+      path: "user",
+      select: "name",
+    });
 
   res.status(200).json({
     status: "success",
@@ -112,7 +111,7 @@ export const deleteComment = catchAsync(async (req, res, next) => {
 
   await Comment.findByIdAndDelete(req.params.commentId);
 
-  res.status(204).json({
+  res.status(200).json({
     status: "success",
     message: "Comment deleted successfully",
     data: null,
