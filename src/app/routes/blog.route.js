@@ -7,6 +7,7 @@ import {
   getAllBlogs,
   getAllTags,
   getBlog,
+  getBlogReaction,
   likeBlog,
   updateBlog,
 } from "../controllers/blog.controller.js";
@@ -17,6 +18,7 @@ blogRouter.get("/tags", getAllTags);
 
 blogRouter.patch("/:blogId/like", protect, likeBlog);
 blogRouter.patch("/:blogId/dislike", protect, dislikeBlog);
+blogRouter.get("/:blogId/reactions", protect, getBlogReaction);
 
 blogRouter
   .route("/")

@@ -147,6 +147,20 @@ export const deleteBlog = catchAsync(async (req, res, next) => {
   });
 });
 
+export const getBlogReaction = catchAsync(async (req, res, next) => {
+  const reaction = await BlogReactions.findOne({
+    blog: req.params.blogId,
+    user: req.user._id,
+  });
+
+  res.status(200).json({
+    status: "success",
+    data: {
+      reaction,
+    },
+  });
+});
+
 export const likeBlog = catchAsync(async (req, res, next) => {
   const blog = await Blog.findById(req.params.blogId);
 
