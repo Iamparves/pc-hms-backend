@@ -6,6 +6,7 @@ class APIFeaturesQuery {
 
   filter() {
     const queryObj = { ...this.queryString };
+
     const excludedFields = [
       "page",
       "sort",
@@ -13,6 +14,7 @@ class APIFeaturesQuery {
       "fields",
       "search",
       "populate",
+      "startDate",
     ];
     excludedFields.forEach((el) => delete queryObj[el]);
 
@@ -20,6 +22,18 @@ class APIFeaturesQuery {
     queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, (match) => `$${match}`);
 
     this.query = this.query.find(JSON.parse(queryStr));
+
+    return this;
+  }
+
+  startDateFilter() {
+    const startDate = this.queryString.startDate;
+
+    if (startDate) {
+      this.query = this.query.find({
+        startDate: { $lte: new Date(startDate) },
+      });
+    }
 
     return this;
   }

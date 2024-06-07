@@ -29,7 +29,7 @@ const noticeSchema = mongoose.Schema(
       default: "Active",
     },
     audience: {
-      type: [String],
+      type: String,
       required: true,
       enum: ["patient", "hospital", "all"],
       default: "all",

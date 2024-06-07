@@ -11,6 +11,7 @@ export const createNewNotice = catchAsync(async (req, res, next) => {
     "content",
     "startDate",
     "endDate",
+    "status",
     "audience"
   );
   noticeData.author = req.user._id;
@@ -27,8 +28,16 @@ export const createNewNotice = catchAsync(async (req, res, next) => {
 });
 
 export const getAllNotices = catchAsync(async (req, res, next) => {
+  if (req.user.role !== "admin") {
+    req.query.startDate = new Date().setHours(24, 0, 0, 0);
+    req.query.audience = { $in: ["all", "hospital"] };
+  }
+
+  req.query.sort = req.query.sort || "-createdAt";
+
   const features = new APIFeaturesQuery(Notice.find(), req.query)
     .filter()
+    .startDateFilter()
     .sort()
     .limitFields()
     .paginate();
@@ -46,7 +55,7 @@ export const getAllNotices = catchAsync(async (req, res, next) => {
 });
 
 export const getNotice = catchAsync(async (req, res, next) => {
-  const notice = await Notice.findById(req.params.id).populate({
+  const notice = await Notice.findById(req.params.noticeId).populate({
     path: "author",
     select: "name email",
   });
@@ -71,13 +80,18 @@ export const updateNotice = catchAsync(async (req, res, next) => {
     "content",
     "startDate",
     "endDate",
+    "status",
     "audience"
   );
 
-  const notice = await Notice.findByIdAndUpdate(req.params.id, noticeData, {
-    new: true,
-    runValidators: true,
-  });
+  const notice = await Notice.findByIdAndUpdate(
+    req.params.noticeId,
+    noticeData,
+    {
+      new: true,
+      runValidators: true,
+    }
+  );
 
   if (!notice) {
     return next(new AppError("Notice not found", 404));
@@ -93,13 +107,13 @@ export const updateNotice = catchAsync(async (req, res, next) => {
 });
 
 export const deleteNotice = catchAsync(async (req, res, next) => {
-  const notice = await Notice.findByIdAndDelete(req.params.id);
+  const notice = await Notice.findByIdAndDelete(req.params.noticeId);
 
   if (!notice) {
     return next(new AppError("Notice not found", 404));
   }
 
-  res.status(204).json({
+  res.status(200).json({
     status: "success",
     message: "Notice deleted successfully",
     data: null,

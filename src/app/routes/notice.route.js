@@ -18,7 +18,7 @@ noticeRouter
   .post(restrictTo("admin"), createNewNotice);
 
 noticeRouter
-  .route("/:id")
+  .route("/:noticeId")
   .get(getNotice)
   .patch(restrictTo("admin"), updateNotice)
   .delete(restrictTo("admin"), deleteNotice);
