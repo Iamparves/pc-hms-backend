@@ -9,6 +9,7 @@ import commentRouter from "./app/routes/comment.route.js";
 import doctorRouter from "./app/routes/doctor.route.js";
 import hospitalRouter from "./app/routes/hospital.route.js";
 import noticeRouter from "./app/routes/notice.route.js";
+import overviewRouter from "./app/routes/overview.route.js";
 import userRouter from "./app/routes/user.route.js";
 import config from "./config/index.js";
 import AppError from "./utils/appError.js";
@@ -43,6 +44,7 @@ app.use("/api/v1/appointments", appointmentRouter);
 app.use("/api/v1/notices", noticeRouter);
 app.use("/api/v1/blogs", blogRouter);
 app.use("/api/v1/comments", commentRouter);
+app.use("/api/v1/overview", overviewRouter);
 
 app.get("/", (req, res) => {
   res.status(200).json({
