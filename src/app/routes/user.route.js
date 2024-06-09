@@ -1,8 +1,10 @@
 import express from "express";
 import {
+  forgotPassword,
   login,
   logout,
   protect,
+  resetPassword,
   restrictTo,
   signup,
   updatePassword,
@@ -36,7 +38,11 @@ userRouter
   .delete(deleteAdmin);
 
 userRouter.patch("/verify-otp", verifyOTP);
+
 userRouter.patch("/update-me", protect, restrictTo("patient"), updateMe);
 userRouter.patch("/update-password", protect, updatePassword);
+
+userRouter.post("/forgot-password", forgotPassword);
+userRouter.patch("/reset-password", resetPassword);
 
 export default userRouter;

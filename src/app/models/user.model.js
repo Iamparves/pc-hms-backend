@@ -140,6 +140,17 @@ userSchema.methods.createVeificationOTP = async function () {
   return otp;
 };
 
+userSchema.methods.createResetPasswordOTP = async function () {
+  const otp = Math.floor(100000 + Math.random() * 900000);
+
+  this.resetPasswordOTP = otp;
+  this.resetPasswordOTPExpires = Date.now() + 10 * 60 * 1000; // 10 minutes
+
+  await this.save({ validateBeforeSave: false });
+
+  return otp;
+};
+
 const User = mongoose.model("User", userSchema);
 
 export default User;
