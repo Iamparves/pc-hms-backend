@@ -39,6 +39,10 @@ export const createNewBlog = catchAsync(async (req, res, next) => {
 export const getAllBlogs = catchAsync(async (req, res, next) => {
   req.query.populate = "author:name|email";
 
+  const totalFeatures = new APIFeaturesQuery(Blog.find(), req.query).filter();
+
+  const totalBlogs = await totalFeatures.query.countDocuments();
+
   const features = new APIFeaturesQuery(Blog.find(), req.query)
     .filter()
     .populate()
@@ -51,7 +55,9 @@ export const getAllBlogs = catchAsync(async (req, res, next) => {
   res.status(200).json({
     status: "success",
     message: "Blogs fetched successfully",
+    results: blogs.length,
     data: {
+      totalDocs: totalBlogs,
       blogs,
     },
   });
