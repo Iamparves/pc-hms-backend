@@ -73,6 +73,22 @@ const sendVerificationOTP = async (user, req, res, next) => {
   }
 };
 
+export const resendVerificationOTP = async (req, res, next) => {
+  const { mobileNo } = req.body;
+
+  const user = await User.findOne({ mobileNo });
+
+  if (!user) {
+    return next(new AppError("User not found!", 400));
+  }
+
+  if (user.isVerified) {
+    return next(new AppError("User already verified!", 400));
+  }
+
+  await sendVerificationOTP(user, req, res, next);
+};
+
 export const signup = catchAsync(async (req, res, next) => {
   const userData = filterObj(
     req.body,
