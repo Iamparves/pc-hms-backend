@@ -100,7 +100,8 @@ export const updateBlog = catchAsync(async (req, res, next) => {
   }
 
   if (
-    (req.user.role === "hospital" && blog.author.toString() !== req.user._id) ||
+    (req.user.role === "hospital" &&
+      blog.author.toString() !== req.user._id.toString()) ||
     (req.user.role === "admin" && blog.postedBy === "hospital")
   ) {
     return next(
@@ -134,7 +135,8 @@ export const deleteBlog = catchAsync(async (req, res, next) => {
   }
 
   if (
-    (req.user.role === "hospital" && blog.author.toString() !== req.user._id) ||
+    (req.user.role === "hospital" &&
+      blog.author.toString() !== req.user._id.toString()) ||
     (req.user.role === "admin" && blog.postedBy === "hospital")
   ) {
     return next(
