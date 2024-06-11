@@ -46,7 +46,6 @@ DATABASE_URL=your_mongo_database_url
 
 JWT_SECRET=your_jwt_secret
 JWT_EXPIRES_IN=90d
-JWT_COOKIE_EXPIRES_IN=90
 CLIENT_URL=your_client_url
 
 SMS_API_KEY=your_sms_api_key
