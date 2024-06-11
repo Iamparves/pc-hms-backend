@@ -2,7 +2,6 @@ import express from "express";
 import {
   forgotPassword,
   login,
-  logout,
   protect,
   resendVerificationOTP,
   resetPassword,
@@ -26,7 +25,6 @@ userRouter.get("/me", protect, getMe);
 
 userRouter.post("/signup", signup);
 userRouter.post("/login", login);
-userRouter.post("/logout", logout);
 
 userRouter
   .route("/admin", protect, restrictTo("admin"))

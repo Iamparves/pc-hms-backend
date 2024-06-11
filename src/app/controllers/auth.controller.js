@@ -17,23 +17,13 @@ const signToken = (id) =>
 const sendTokenResponse = (user, statusCode, res) => {
   const token = signToken(user._id);
 
-  const cookieOptions = {
-    httpOnly: true,
-    secure: config.NODE_ENV === "production",
-    sameSite: "None",
-    maxAge: new Date(
-      config.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000 // 90 days
-    ),
-  };
-
-  res.cookie("jwt", token, cookieOptions);
-
   user.password = undefined;
 
   res.status(statusCode).json({
     status: "success",
     data: {
       user,
+      token,
     },
   });
 };
@@ -151,14 +141,6 @@ export const login = catchAsync(async (req, res, next) => {
   return sendTokenResponse(user, 200, res);
 });
 
-export const logout = catchAsync(async (req, res) => {
-  res.clearCookie("jwt");
-
-  res
-    .status(200)
-    .json({ status: "success", message: "Logged out successfully!" });
-});
-
 export const verifyOTP = catchAsync(async (req, res, next) => {
   const { mobileNo, otp } = req.body;
 
@@ -196,7 +178,7 @@ export const verifyOTP = catchAsync(async (req, res, next) => {
 });
 
 export const protect = catchAsync(async (req, res, next) => {
-  const token = req.cookies?.jwt;
+  const token = req.headers?.authorization?.split(" ")[1];
 
   if (!token) {
     return next(
