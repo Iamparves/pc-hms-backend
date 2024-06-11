@@ -6,6 +6,7 @@ import globalErrorHander from "./app/controllers/error.controller.js";
 import appointmentRouter from "./app/routes/appointment.route.js";
 import blogRouter from "./app/routes/blog.route.js";
 import commentRouter from "./app/routes/comment.route.js";
+import contactRouter from "./app/routes/contact.route.js";
 import doctorRouter from "./app/routes/doctor.route.js";
 import hospitalRouter from "./app/routes/hospital.route.js";
 import noticeRouter from "./app/routes/notice.route.js";
@@ -45,6 +46,7 @@ app.use("/api/v1/notices", noticeRouter);
 app.use("/api/v1/blogs", blogRouter);
 app.use("/api/v1/comments", commentRouter);
 app.use("/api/v1/overview", overviewRouter);
+app.use("/api/v1/contact", contactRouter);
 
 app.get("/", (req, res) => {
   res.status(200).json({

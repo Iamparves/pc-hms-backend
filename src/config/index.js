@@ -10,6 +10,11 @@ const config = {
   CLIENT_URL: process.env.CLIENT_URL,
   SMS_API_KEY: process.env.SMS_API_KEY,
   SMS_SENDER_ID: process.env.SMS_SENDER_ID,
+  MAIL_HOST: process.env.MAIL_HOST,
+  MAIL_PORT: process.env.MAIL_PORT,
+  MAIL_USER: process.env.MAIL_USER,
+  MAIL_PASS: process.env.MAIL_PASS,
+  EMAIL_TO: process.env.EMAIL_TO,
 };
 
 export default config;
