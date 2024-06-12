@@ -27,7 +27,7 @@ const doctorSchema = new mongoose.Schema(
     languages: [String],
     institute: String,
     department: String,
-    appointmentNo: Number,
+    workExperience: String,
     chamberTime: String,
     offDays: [
       {

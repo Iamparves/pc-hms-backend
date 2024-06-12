@@ -10,12 +10,11 @@ import {
 
 const noticeRouter = express.Router();
 
+noticeRouter.get("/", getAllNotices);
+
 noticeRouter.use(protect);
 
-noticeRouter
-  .route("/")
-  .get(getAllNotices)
-  .post(restrictTo("admin"), createNewNotice);
+noticeRouter.route("/").post(restrictTo("admin"), createNewNotice);
 
 noticeRouter
   .route("/:noticeId")

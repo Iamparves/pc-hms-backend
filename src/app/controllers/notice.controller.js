@@ -1,8 +1,12 @@
+import jwt from "jsonwebtoken";
+import { promisify } from "util";
+import config from "../../config/index.js";
 import APIFeaturesQuery from "../../utils/apiFeaturesQuery.js";
 import AppError from "../../utils/appError.js";
 import catchAsync from "../../utils/catchAsync.js";
 import filterObj from "../../utils/filterObj.js";
 import Notice from "../models/notice.model.js";
+import User from "../models/user.model.js";
 
 export const createNewNotice = catchAsync(async (req, res, next) => {
   const noticeData = filterObj(
@@ -28,9 +32,20 @@ export const createNewNotice = catchAsync(async (req, res, next) => {
 });
 
 export const getAllNotices = catchAsync(async (req, res, next) => {
-  if (req.user.role !== "admin") {
+  const token = req.headers?.authorization?.split(" ")[1];
+
+  let userRole = "anonymous";
+
+  if (token) {
+    const decoded = await promisify(jwt.verify)(token, config.JWT_SECRET);
+    const currentUser = await User.findById(decoded.id);
+
+    userRole = currentUser.role;
+  }
+
+  if (userRole !== "admin") {
     req.query.startDate = new Date().setHours(24, 0, 0, 0);
-    req.query.audience = { $in: ["all", "hospital"] };
+    req.query.audience = { $in: ["all", userRole] };
   }
 
   req.query.sort = req.query.sort || "-createdAt";
