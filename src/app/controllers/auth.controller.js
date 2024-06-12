@@ -135,7 +135,13 @@ export const login = catchAsync(async (req, res, next) => {
   }
 
   if (!user.isVerified) {
-    return next(new AppError("User not verified!", 401));
+    return res.status(401).json({
+      status: "fail",
+      message: "User not verified!",
+      data: {
+        user,
+      },
+    });
   }
 
   return sendTokenResponse(user, 200, res);
