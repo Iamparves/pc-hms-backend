@@ -1,8 +1,37 @@
 import APIFeaturesQuery from "../../utils/apiFeaturesQuery.js";
+import AppError from "../../utils/appError.js";
 import catchAsync from "../../utils/catchAsync.js";
 import filterObj from "../../utils/filterObj.js";
 import Hospital from "../models/hospital.model.js";
 import User from "../models/user.model.js";
+
+export const createHospital = catchAsync(async (req, res, next) => {
+  const userData = filterObj(
+    req.body,
+    "name",
+    "mobileNo",
+    "password",
+    "confirmPassword"
+  );
+
+  const newHospital = await Hospital.create({
+    name: userData.name,
+  });
+
+  userData.role = "hospital";
+  userData.profileModel = "Hospital";
+  userData.profile = newHospital._id;
+
+  const newUser = await User.create(userData);
+
+  res.status(201).json({
+    status: "success",
+    message: "Hospital created successfully!",
+    data: {
+      user: newUser,
+    },
+  });
+});
 
 export const updateHospital = catchAsync(async (req, res, next) => {
   const hospitalData = filterObj(
