@@ -1,6 +1,6 @@
-import mongoose from "mongoose";
-import AppError from "../../utils/appError.js";
-import BlogReactions from "./blogReactions.model.js";
+const mongoose = require("mongoose");
+const AppError = require("../../utils/appError.js");
+const BlogReactions = require("./blogReactions.model.js");
 
 const blogSchema = mongoose.Schema(
   {
@@ -111,4 +111,4 @@ blogSchema.methods.reaction = async function (userId, type) {
 
 const Blog = mongoose.model("Blog", blogSchema);
 
-export default Blog;
+module.exports = Blog;

@@ -1,10 +1,12 @@
-import express from "express";
-import {
+const express = require("express");
+
+const {
   createNewAppointment,
   getAppointmentById,
   getAppointments,
-} from "../controllers/appointment.controller.js";
-import { protect, restrictTo } from "../controllers/auth.controller.js";
+} = require("../controllers/appointment.controller.js");
+
+const { protect, restrictTo } = require("../controllers/auth.controller.js");
 
 const appointmentRouter = express.Router();
 
@@ -19,4 +21,4 @@ appointmentRouter.get("/", protect, getAppointments);
 
 appointmentRouter.get("/:appointmentId", protect, getAppointmentById);
 
-export default appointmentRouter;
+module.exports = appointmentRouter;

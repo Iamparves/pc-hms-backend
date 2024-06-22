@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+const mongoose = require("mongoose");
 
 const doctorSchema = new mongoose.Schema(
   {
@@ -68,4 +68,4 @@ doctorSchema.pre("aggregate", function () {
 
 const Doctor = mongoose.model("Doctor", doctorSchema);
 
-export default Doctor;
+module.exports = Doctor;

@@ -1,5 +1,5 @@
-import express from "express";
-import {
+const express = require("express");
+const {
   forgotPassword,
   login,
   protect,
@@ -9,21 +9,23 @@ import {
   signup,
   updatePassword,
   verifyOTP,
-} from "../controllers/auth.controller.js";
-import {
+} = require("../controllers/auth.controller.js");
+
+const {
   createAdmin,
   deleteAdmin,
   getAdmins,
   getMe,
   updateAdmin,
   updateMe,
-} from "../controllers/user.controller.js";
+} = require("../controllers/user.controller.js");
+const checkFirstUser = require("../middlewares/checkFirstUser.js");
 
 const userRouter = express.Router();
 
 userRouter.get("/me", protect, getMe);
 
-userRouter.post("/signup", signup);
+userRouter.post("/signup", checkFirstUser, signup);
 userRouter.post("/login", login);
 
 userRouter
@@ -45,4 +47,4 @@ userRouter.patch("/update-password", protect, updatePassword);
 userRouter.post("/forgot-password", forgotPassword);
 userRouter.patch("/reset-password", resetPassword);
 
-export default userRouter;
+module.exports = userRouter;

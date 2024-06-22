@@ -1,12 +1,13 @@
-import express from "express";
-import { protect, restrictTo } from "../controllers/auth.controller.js";
-import {
+const express = require("express");
+const { protect, restrictTo } = require("../controllers/auth.controller.js");
+
+const {
   createNewNotice,
   deleteNotice,
   getAllNotices,
   getNotice,
   updateNotice,
-} from "../controllers/notice.controller.js";
+} = require("../controllers/notice.controller.js");
 
 const noticeRouter = express.Router();
 
@@ -22,4 +23,4 @@ noticeRouter
   .patch(restrictTo("admin"), updateNotice)
   .delete(restrictTo("admin"), deleteNotice);
 
-export default noticeRouter;
+module.exports = noticeRouter;

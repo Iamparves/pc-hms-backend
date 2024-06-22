@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+const mongoose = require("mongoose");
 
 const blogReactionsSchema = mongoose.Schema({
   blog: {
@@ -21,4 +21,4 @@ const blogReactionsSchema = mongoose.Schema({
 
 const BlogReactions = mongoose.model("BlogReactions", blogReactionsSchema);
 
-export default BlogReactions;
+module.exports = BlogReactions;

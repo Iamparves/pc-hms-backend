@@ -1,12 +1,12 @@
-import jwt from "jsonwebtoken";
-import { promisify } from "util";
-import config from "../../config/index.js";
-import AppError from "../../utils/appError.js";
-import catchAsync from "../../utils/catchAsync.js";
-import filterObj from "../../utils/filterObj.js";
-import { sendSms } from "../../utils/sendSms.js";
-import Patient from "../models/patient.model.js";
-import User from "../models/user.model.js";
+const jwt = require("jsonwebtoken");
+const { promisify } = require("util");
+const config = require("../../config/index");
+const AppError = require("../../utils/appError");
+const catchAsync = require("../../utils/catchAsync");
+const filterObj = require("../../utils/filterObj");
+const { sendSms } = require("../../utils/sendSms");
+const Patient = require("../models/patient.model");
+const User = require("../models/user.model");
 
 const signToken = (id) =>
   jwt.sign({ id }, config.JWT_SECRET, {
@@ -62,7 +62,7 @@ const sendVerificationOTP = async (user, req, res, next) => {
   }
 };
 
-export const resendVerificationOTP = async (req, res, next) => {
+exports.resendVerificationOTP = async (req, res, next) => {
   const { mobileNo } = req.body;
 
   const user = await User.findOne({ mobileNo });
@@ -78,7 +78,7 @@ export const resendVerificationOTP = async (req, res, next) => {
   await sendVerificationOTP(user, req, res, next);
 };
 
-export const signup = catchAsync(async (req, res, next) => {
+exports.signup = catchAsync(async (req, res, next) => {
   const userData = filterObj(
     req.body,
     "name",
@@ -101,7 +101,7 @@ export const signup = catchAsync(async (req, res, next) => {
   await sendVerificationOTP(newUser, req, res, next);
 });
 
-export const login = catchAsync(async (req, res, next) => {
+exports.login = catchAsync(async (req, res, next) => {
   const { mobileNo, password } = req.body;
 
   if (!mobileNo || !password) {
@@ -132,7 +132,7 @@ export const login = catchAsync(async (req, res, next) => {
   return sendTokenResponse(user, 200, res);
 });
 
-export const verifyOTP = catchAsync(async (req, res, next) => {
+exports.verifyOTP = catchAsync(async (req, res, next) => {
   const { mobileNo, otp } = req.body;
 
   const user = await User.findOne({ mobileNo }).select(
@@ -168,7 +168,7 @@ export const verifyOTP = catchAsync(async (req, res, next) => {
   });
 });
 
-export const protect = catchAsync(async (req, res, next) => {
+exports.protect = catchAsync(async (req, res, next) => {
   const token = req.headers?.authorization?.split(" ")[1];
 
   if (!token) {
@@ -201,7 +201,7 @@ export const protect = catchAsync(async (req, res, next) => {
   next();
 });
 
-export const restrictTo = (...roles) => {
+exports.restrictTo = (...roles) => {
   return catchAsync(async (req, res, next) => {
     const { role } = req.user;
 
@@ -215,7 +215,7 @@ export const restrictTo = (...roles) => {
   });
 };
 
-export const updatePassword = catchAsync(async (req, res, next) => {
+exports.updatePassword = catchAsync(async (req, res, next) => {
   const { currentPassword, newPassword, confirmNewPassword } = req.body;
   const user = await User.findById(req.user._id).select("+password");
 
@@ -244,7 +244,7 @@ export const updatePassword = catchAsync(async (req, res, next) => {
   });
 });
 
-export const forgotPassword = catchAsync(async (req, res, next) => {
+exports.forgotPassword = catchAsync(async (req, res, next) => {
   const { mobileNo } = req.body;
 
   const user = await User.findOne({ mobileNo });
@@ -287,7 +287,7 @@ export const forgotPassword = catchAsync(async (req, res, next) => {
   }
 });
 
-export const resetPassword = catchAsync(async (req, res, next) => {
+exports.resetPassword = catchAsync(async (req, res, next) => {
   const { mobileNo, otp, newPassword, confirmNewPassword } = req.body;
 
   const user = await User.findOne({

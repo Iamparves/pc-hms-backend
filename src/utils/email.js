@@ -1,6 +1,6 @@
-import nodemailer from "nodemailer";
-import smtpTransport from "nodemailer-smtp-transport";
-import config from "../config/index.js";
+const nodemailer = require("nodemailer");
+const smtpTransport = require("nodemailer-smtp-transport");
+const config = require("../config/index.js");
 
 const sendEmail = async (res, options) => {
   // 1) Create a transporter
@@ -45,4 +45,4 @@ const sendEmail = async (res, options) => {
   });
 };
 
-export default sendEmail;
+module.exports = sendEmail;

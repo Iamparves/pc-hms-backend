@@ -1,12 +1,13 @@
-import express from "express";
-import { protect } from "../controllers/auth.controller.js";
-import {
+const express = require("express");
+const { protect } = require("../controllers/auth.controller.js");
+
+const {
   createComment,
   deleteComment,
   getAllComments,
   getCommentsByBlog,
   updateComment,
-} from "../controllers/comment.controller.js";
+} = require("../controllers/comment.controller.js");
 
 const commentRouter = express.Router();
 
@@ -19,4 +20,4 @@ commentRouter
   .patch(protect, updateComment)
   .delete(protect, deleteComment);
 
-export default commentRouter;
+module.exports = commentRouter;

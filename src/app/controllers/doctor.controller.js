@@ -1,12 +1,15 @@
-import APIFeaturesAggregation from "../../utils/apiFeaturesAggregation.js";
-import APIFeaturesQuery from "../../utils/apiFeaturesQuery.js";
-import AppError from "../../utils/appError.js";
-import catchAsync from "../../utils/catchAsync.js";
-import filterObj from "../../utils/filterObj.js";
-import Doctor from "../models/doctor.model.js";
-import Speciality, { getSpecialityIds } from "../models/speciality.model.js";
+const APIFeaturesAggregation = require("../../utils/apiFeaturesAggregation.js");
+const APIFeaturesQuery = require("../../utils/apiFeaturesQuery.js");
+const AppError = require("../../utils/appError.js");
+const catchAsync = require("../../utils/catchAsync.js");
+const filterObj = require("../../utils/filterObj.js");
+const Doctor = require("../models/doctor.model.js");
+const {
+  Speciality,
+  getSpecialityIds,
+} = require("../models/speciality.model.js");
 
-export const createDoctor = catchAsync(async (req, res, next) => {
+exports.createDoctor = catchAsync(async (req, res, next) => {
   const doctorData = filterObj(
     req.body,
     "name",
@@ -46,7 +49,7 @@ export const createDoctor = catchAsync(async (req, res, next) => {
   });
 });
 
-export const getAllDoctors = catchAsync(async (req, res, next) => {
+exports.getAllDoctors = catchAsync(async (req, res, next) => {
   const features = new APIFeaturesAggregation(Doctor, req.query)
     .filter()
     .hospitalFilter()
@@ -74,7 +77,7 @@ export const getAllDoctors = catchAsync(async (req, res, next) => {
   });
 });
 
-export const getDoctorById = catchAsync(async (req, res, next) => {
+exports.getDoctorById = catchAsync(async (req, res, next) => {
   const doctor = await Doctor.findById(req.params.doctorId).populate(
     "hospital specialities"
   );
@@ -92,7 +95,7 @@ export const getDoctorById = catchAsync(async (req, res, next) => {
   });
 });
 
-export const updateDoctor = catchAsync(async (req, res, next) => {
+exports.updateDoctor = catchAsync(async (req, res, next) => {
   const doctorData = filterObj(
     req.body,
     "name",
@@ -151,7 +154,7 @@ export const updateDoctor = catchAsync(async (req, res, next) => {
   });
 });
 
-export const deleteDoctor = catchAsync(async (req, res, next) => {
+exports.deleteDoctor = catchAsync(async (req, res, next) => {
   const doctor = await Doctor.findById(req.params.doctorId);
 
   if (!doctor) {
@@ -173,7 +176,7 @@ export const deleteDoctor = catchAsync(async (req, res, next) => {
   });
 });
 
-export const getSpecialities = catchAsync(async (req, res, next) => {
+exports.getSpecialities = catchAsync(async (req, res, next) => {
   const specialities = await Speciality.find();
 
   return res.status(200).json({
@@ -186,7 +189,7 @@ export const getSpecialities = catchAsync(async (req, res, next) => {
   });
 });
 
-export const getHospitalDoctors = catchAsync(async (req, res, next) => {
+exports.getHospitalDoctors = catchAsync(async (req, res, next) => {
   req.query.hospital = req.user.profile;
 
   const features = new APIFeaturesQuery(Doctor.find(), req.query)

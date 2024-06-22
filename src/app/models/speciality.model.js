@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+const mongoose = require("mongoose");
 
 const specialitySchema = new mongoose.Schema({
   name: {
@@ -9,9 +9,9 @@ const specialitySchema = new mongoose.Schema({
   },
 });
 
-const Speciality = mongoose.model("Speciality", specialitySchema);
+exports.Speciality = mongoose.model("Speciality", specialitySchema);
 
-export const getSpecialityIds = async function (specialities) {
+exports.getSpecialityIds = async function (specialities) {
   const newSpecialities = [];
 
   await Promise.all(
@@ -31,5 +31,3 @@ export const getSpecialityIds = async function (specialities) {
 
   return newSpecialities;
 };
-
-export default Speciality;

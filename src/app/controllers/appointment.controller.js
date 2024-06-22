@@ -1,10 +1,10 @@
-import APIFeaturesQuery from "../../utils/apiFeaturesQuery.js";
-import AppError from "../../utils/appError.js";
-import catchAsync from "../../utils/catchAsync.js";
-import filterObj from "../../utils/filterObj.js";
-import Appointment from "../models/appointment.model.js";
+const APIFeaturesQuery = require("../../utils/apiFeaturesQuery");
+const AppError = require("../../utils/appError");
+const catchAsync = require("../../utils/catchAsync");
+const filterObj = require("../../utils/filterObj");
+const Appointment = require("../models/appointment.model");
 
-export const createNewAppointment = catchAsync(async (req, res, next) => {
+exports.createNewAppointment = catchAsync(async (req, res, next) => {
   const patient = req.user._id;
 
   const appointmentData = filterObj(
@@ -29,7 +29,7 @@ export const createNewAppointment = catchAsync(async (req, res, next) => {
   });
 });
 
-export const getAppointments = catchAsync(async (req, res, next) => {
+exports.getAppointments = catchAsync(async (req, res, next) => {
   if (req.user.role === "patient") {
     req.query.patient = req.user._id;
   } else if (req.user.role === "hospital") {
@@ -55,7 +55,7 @@ export const getAppointments = catchAsync(async (req, res, next) => {
   });
 });
 
-export const getAppointmentById = catchAsync(async (req, res, next) => {
+exports.getAppointmentById = catchAsync(async (req, res, next) => {
   const appointment = await Appointment.findById(req.params.appointmentId);
 
   if (!appointment) {

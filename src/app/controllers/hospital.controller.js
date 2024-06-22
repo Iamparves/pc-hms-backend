@@ -1,11 +1,11 @@
-import APIFeaturesQuery from "../../utils/apiFeaturesQuery.js";
-import AppError from "../../utils/appError.js";
-import catchAsync from "../../utils/catchAsync.js";
-import filterObj from "../../utils/filterObj.js";
-import Hospital from "../models/hospital.model.js";
-import User from "../models/user.model.js";
+const APIFeaturesQuery = require("../../utils/apiFeaturesQuery.js");
+const AppError = require("../../utils/appError.js");
+const catchAsync = require("../../utils/catchAsync.js");
+const filterObj = require("../../utils/filterObj.js");
+const Hospital = require("../models/hospital.model.js");
+const User = require("../models/user.model.js");
 
-export const createHospital = catchAsync(async (req, res, next) => {
+exports.createHospital = catchAsync(async (req, res, next) => {
   const userData = filterObj(
     req.body,
     "name",
@@ -33,7 +33,7 @@ export const createHospital = catchAsync(async (req, res, next) => {
   });
 });
 
-export const updateHospital = catchAsync(async (req, res, next) => {
+exports.updateHospital = catchAsync(async (req, res, next) => {
   const hospitalData = filterObj(
     req.body,
     "name",
@@ -76,7 +76,7 @@ export const updateHospital = catchAsync(async (req, res, next) => {
   });
 });
 
-export const getHospitals = catchAsync(async (req, res, next) => {
+exports.getHospitals = catchAsync(async (req, res, next) => {
   const features = new APIFeaturesQuery(Hospital.find(), req.query)
     .filter()
     .sort()
@@ -94,7 +94,7 @@ export const getHospitals = catchAsync(async (req, res, next) => {
   });
 });
 
-export const getAdminHospitals = catchAsync(async (req, res, next) => {
+exports.getAdminHospitals = catchAsync(async (req, res, next) => {
   const hospitals = await Hospital.aggregate([
     {
       $lookup: {
@@ -125,7 +125,7 @@ export const getAdminHospitals = catchAsync(async (req, res, next) => {
   });
 });
 
-export const getHospitalById = catchAsync(async (req, res, next) => {
+exports.getHospitalById = catchAsync(async (req, res, next) => {
   const hospital = await Hospital.findById(req.params.hospitalId);
 
   if (!hospital) {

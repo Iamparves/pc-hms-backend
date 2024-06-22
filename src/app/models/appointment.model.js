@@ -1,8 +1,8 @@
-import mongoose from "mongoose";
-import AppError from "../../utils/appError.js";
-import generateDayId from "../../utils/generateDayId.js";
-import Doctor from "./doctor.model.js";
-import Hospital from "./hospital.model.js";
+const mongoose = require("mongoose");
+const AppError = require("../../utils/appError.js");
+const generateDayId = require("../../utils/generateDayId.js");
+const Doctor = require("./doctor.model.js");
+const Hospital = require("./hospital.model.js");
 
 const appointmentSchema = new mongoose.Schema(
   {
@@ -78,4 +78,4 @@ appointmentSchema.pre("save", async function (next) {
 
 const Appointment = mongoose.model("Appointment", appointmentSchema);
 
-export default Appointment;
+module.exports = Appointment;

@@ -1,6 +1,6 @@
-import bcrypt from "bcryptjs";
-import mongoose from "mongoose";
-import validator from "validator";
+const mongoose = require("mongoose");
+const bcrypt = require("bcryptjs");
+const validator = require("validator");
 
 const userSchema = mongoose.Schema(
   {
@@ -153,4 +153,4 @@ userSchema.methods.createResetPasswordOTP = async function () {
 
 const User = mongoose.model("User", userSchema);
 
-export default User;
+module.exports = User;

@@ -91,4 +91,4 @@ class APIFeaturesQuery {
   }
 }
 
-export default APIFeaturesQuery;
+module.exports = APIFeaturesQuery;

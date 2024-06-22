@@ -1,9 +1,9 @@
-import config from "../../config/index.js";
-import AppError from "../../utils/appError.js";
-import catchAsync from "../../utils/catchAsync.js";
-import sendEmail from "../../utils/email.js";
+const config = require("../../config/index");
+const AppError = require("../../utils/appError");
+const catchAsync = require("../../utils/catchAsync");
+const sendEmail = require("../../utils/email");
 
-export const sendMessage = catchAsync(async (req, res, next) => {
+exports.sendMessage = catchAsync(async (req, res, next) => {
   const { name, email, subject, message } = req.body;
 
   if (!name || !message) {

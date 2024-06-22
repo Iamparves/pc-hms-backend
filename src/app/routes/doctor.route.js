@@ -1,6 +1,7 @@
-import express from "express";
-import { protect, restrictTo } from "../controllers/auth.controller.js";
-import {
+const express = require("express");
+const { protect, restrictTo } = require("../controllers/auth.controller.js");
+
+const {
   createDoctor,
   deleteDoctor,
   getAllDoctors,
@@ -8,7 +9,7 @@ import {
   getHospitalDoctors,
   getSpecialities,
   updateDoctor,
-} from "../controllers/doctor.controller.js";
+} = require("../controllers/doctor.controller.js");
 
 const doctorRouter = express.Router();
 
@@ -32,4 +33,4 @@ doctorRouter
   .patch(protect, restrictTo("hospital"), updateDoctor)
   .delete(protect, restrictTo("hospital"), deleteDoctor);
 
-export default doctorRouter;
+module.exports = doctorRouter;

@@ -1,10 +1,11 @@
-import express from "express";
-import { protect, restrictTo } from "../controllers/auth.controller.js";
-import {
+const express = require("express");
+const { protect, restrictTo } = require("../controllers/auth.controller.js");
+
+const {
   getAdminOverview,
   getHospitalOverview,
   getPatientOverview,
-} from "../controllers/overview.controller.js";
+} = require("../controllers/overview.controller.js");
 
 const overviewRouter = express.Router();
 
@@ -22,4 +23,4 @@ overviewRouter.get(
   getPatientOverview
 );
 
-export default overviewRouter;
+module.exports = overviewRouter;

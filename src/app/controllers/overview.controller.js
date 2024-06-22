@@ -1,13 +1,13 @@
-import catchAsync from "../../utils/catchAsync.js";
-import Appointment from "../models/appointment.model.js";
-import Blog from "../models/blog.model.js";
-import Comment from "../models/comment.model.js";
-import Doctor from "../models/doctor.model.js";
-import Hospital from "../models/hospital.model.js";
-import Notice from "../models/notice.model.js";
-import Patient from "../models/patient.model.js";
+const catchAsync = require("../../utils/catchAsync.js");
+const Appointment = require("../models/appointment.model.js");
+const Blog = require("../models/blog.model.js");
+const Comment = require("../models/comment.model.js");
+const Doctor = require("../models/doctor.model.js");
+const Hospital = require("../models/hospital.model.js");
+const Notice = require("../models/notice.model.js");
+const Patient = require("../models/patient.model.js");
 
-export const getAdminOverview = catchAsync(async (req, res, next) => {
+exports.getAdminOverview = catchAsync(async (req, res, next) => {
   const hospitals = await Hospital.countDocuments();
   const doctors = await Doctor.countDocuments();
   const patients = await Patient.countDocuments();
@@ -28,7 +28,7 @@ export const getAdminOverview = catchAsync(async (req, res, next) => {
   });
 });
 
-export const getHospitalOverview = catchAsync(async (req, res, next) => {
+exports.getHospitalOverview = catchAsync(async (req, res, next) => {
   const doctors = await Doctor.countDocuments({ hospital: req.user.profile });
   const appointments = await Appointment.countDocuments({
     hospital: req.user.profile,
@@ -56,7 +56,7 @@ export const getHospitalOverview = catchAsync(async (req, res, next) => {
   });
 });
 
-export const getPatientOverview = catchAsync(async (req, res, next) => {
+exports.getPatientOverview = catchAsync(async (req, res, next) => {
   const appointments = await Appointment.countDocuments({
     patient: req.user._id,
   });

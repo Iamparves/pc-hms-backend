@@ -1,12 +1,13 @@
-import express from "express";
-import { protect, restrictTo } from "../controllers/auth.controller.js";
-import {
+const express = require("express");
+const { protect, restrictTo } = require("../controllers/auth.controller.js");
+
+const {
   createHospital,
   getAdminHospitals,
   getHospitalById,
   getHospitals,
   updateHospital,
-} from "../controllers/hospital.controller.js";
+} = require("../controllers/hospital.controller.js");
 
 const hospitalRouter = express.Router();
 
@@ -18,4 +19,4 @@ hospitalRouter.patch("/", protect, restrictTo("hospital"), updateHospital);
 
 hospitalRouter.route("/:hospitalId").get(getHospitalById);
 
-export default hospitalRouter;
+module.exports = hospitalRouter;

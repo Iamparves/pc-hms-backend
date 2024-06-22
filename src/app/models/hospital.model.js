@@ -1,5 +1,5 @@
-import mongoose from "mongoose";
-import validator from "validator";
+const mongoose = require("mongoose");
+const validator = require("validator");
 
 const hospitalSchema = new mongoose.Schema(
   {
@@ -48,4 +48,4 @@ const hospitalSchema = new mongoose.Schema(
 
 const Hospital = mongoose.model("Hospital", hospitalSchema);
 
-export default Hospital;
+module.exports = Hospital;

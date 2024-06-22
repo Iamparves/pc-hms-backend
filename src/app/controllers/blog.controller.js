@@ -1,12 +1,12 @@
-import APIFeaturesQuery from "../../utils/apiFeaturesQuery.js";
-import AppError from "../../utils/appError.js";
-import catchAsync from "../../utils/catchAsync.js";
-import filterObj from "../../utils/filterObj.js";
-import Blog from "../models/blog.model.js";
-import BlogReactions from "../models/blogReactions.model.js";
-import Comment from "../models/comment.model.js";
+const APIFeaturesQuery = require("../../utils/apiFeaturesQuery");
+const AppError = require("../../utils/appError");
+const catchAsync = require("../../utils/catchAsync");
+const filterObj = require("../../utils/filterObj");
+const Blog = require("../models/blog.model");
+const BlogReactions = require("../models/blogReactions.model");
+const Comment = require("../models/comment.model");
 
-export const createNewBlog = catchAsync(async (req, res, next) => {
+exports.createNewBlog = catchAsync(async (req, res, next) => {
   const blogData = filterObj(
     req.body,
     "title",
@@ -36,7 +36,7 @@ export const createNewBlog = catchAsync(async (req, res, next) => {
   });
 });
 
-export const getAllBlogs = catchAsync(async (req, res, next) => {
+exports.getAllBlogs = catchAsync(async (req, res, next) => {
   req.query.populate = "author:name|email";
 
   const totalFeatures = new APIFeaturesQuery(Blog.find(), req.query).filter();
@@ -63,7 +63,7 @@ export const getAllBlogs = catchAsync(async (req, res, next) => {
   });
 });
 
-export const getBlog = catchAsync(async (req, res, next) => {
+exports.getBlog = catchAsync(async (req, res, next) => {
   const blog = await Blog.findById(req.params.blogId).populate({
     path: "author",
     select: "name email",
@@ -82,7 +82,7 @@ export const getBlog = catchAsync(async (req, res, next) => {
   });
 });
 
-export const updateBlog = catchAsync(async (req, res, next) => {
+exports.updateBlog = catchAsync(async (req, res, next) => {
   const blogData = filterObj(
     req.body,
     "title",
@@ -127,7 +127,7 @@ export const updateBlog = catchAsync(async (req, res, next) => {
   });
 });
 
-export const deleteBlog = catchAsync(async (req, res, next) => {
+exports.deleteBlog = catchAsync(async (req, res, next) => {
   const blog = await Blog.findById(req.params.blogId);
 
   if (!blog) {
@@ -155,7 +155,7 @@ export const deleteBlog = catchAsync(async (req, res, next) => {
   });
 });
 
-export const getBlogReaction = catchAsync(async (req, res, next) => {
+exports.getBlogReaction = catchAsync(async (req, res, next) => {
   const reaction = await BlogReactions.findOne({
     blog: req.params.blogId,
     user: req.user._id,
@@ -169,7 +169,7 @@ export const getBlogReaction = catchAsync(async (req, res, next) => {
   });
 });
 
-export const likeBlog = catchAsync(async (req, res, next) => {
+exports.likeBlog = catchAsync(async (req, res, next) => {
   const blog = await Blog.findById(req.params.blogId);
 
   if (!blog) {
@@ -184,7 +184,7 @@ export const likeBlog = catchAsync(async (req, res, next) => {
   });
 });
 
-export const dislikeBlog = catchAsync(async (req, res, next) => {
+exports.dislikeBlog = catchAsync(async (req, res, next) => {
   const blog = await Blog.findById(req.params.blogId);
 
   if (!blog) {
@@ -199,7 +199,7 @@ export const dislikeBlog = catchAsync(async (req, res, next) => {
   });
 });
 
-export const getAllTags = catchAsync(async (req, res, next) => {
+exports.getAllTags = catchAsync(async (req, res, next) => {
   const uniqueTags = await Blog.aggregate([
     { $unwind: "$tags" },
     { $group: { _id: null, uniqueTags: { $addToSet: "$tags" } } },

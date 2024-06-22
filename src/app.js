@@ -1,19 +1,19 @@
-import cookieParser from "cookie-parser";
-import cors from "cors";
-import express from "express";
-import morgan from "morgan";
-import globalErrorHander from "./app/controllers/error.controller.js";
-import appointmentRouter from "./app/routes/appointment.route.js";
-import blogRouter from "./app/routes/blog.route.js";
-import commentRouter from "./app/routes/comment.route.js";
-import contactRouter from "./app/routes/contact.route.js";
-import doctorRouter from "./app/routes/doctor.route.js";
-import hospitalRouter from "./app/routes/hospital.route.js";
-import noticeRouter from "./app/routes/notice.route.js";
-import overviewRouter from "./app/routes/overview.route.js";
-import userRouter from "./app/routes/user.route.js";
-import config from "./config/index.js";
-import AppError from "./utils/appError.js";
+const cookieParser = require("cookie-parser");
+const cors = require("cors");
+const morgan = require("morgan");
+const globalErrorHandler = require("./app/controllers/error.controller.js");
+const appointmentRouter = require("./app/routes/appointment.route.js");
+const blogRouter = require("./app/routes/blog.route.js");
+const commentRouter = require("./app/routes/comment.route.js");
+const contactRouter = require("./app/routes/contact.route.js");
+const doctorRouter = require("./app/routes/doctor.route.js");
+const hospitalRouter = require("./app/routes/hospital.route.js");
+const noticeRouter = require("./app/routes/notice.route.js");
+const overviewRouter = require("./app/routes/overview.route.js");
+const userRouter = require("./app/routes/user.route.js");
+const config = require("./config/index.js");
+const AppError = require("./utils/appError.js");
+const express = require("express");
 
 process.on("uncaughtException", (err) => {
   console.log("UNCAUGHT EXCEPTION! 💥 Shutting down...");
@@ -60,7 +60,7 @@ app.all("*", (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
 });
 
-app.use(globalErrorHander);
+app.use(globalErrorHandler);
 
 process.on("unhandledRejection", (err) => {
   console.log("UNHANDLED REJECTION! 💥 Shutting down...");
@@ -71,4 +71,4 @@ process.on("unhandledRejection", (err) => {
   });
 });
 
-export default app;
+module.exports = app;

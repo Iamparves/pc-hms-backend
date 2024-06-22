@@ -1,4 +1,4 @@
-import "dotenv/config";
+require("dotenv").config();
 
 const config = {
   PORT: process.env.PORT || 3000,
@@ -16,4 +16,4 @@ const config = {
   EMAIL_TO: process.env.EMAIL_TO,
 };
 
-export default config;
+module.exports = config;

@@ -1,14 +1,14 @@
-import jwt from "jsonwebtoken";
-import { promisify } from "util";
-import config from "../../config/index.js";
-import APIFeaturesQuery from "../../utils/apiFeaturesQuery.js";
-import AppError from "../../utils/appError.js";
-import catchAsync from "../../utils/catchAsync.js";
-import filterObj from "../../utils/filterObj.js";
-import Notice from "../models/notice.model.js";
-import User from "../models/user.model.js";
+const jwt = require("jsonwebtoken");
+const { promisify } = require("util");
+const config = require("../../config/index.js");
+const APIFeaturesQuery = require("../../utils/apiFeaturesQuery.js");
+const AppError = require("../../utils/appError.js");
+const catchAsync = require("../../utils/catchAsync.js");
+const filterObj = require("../../utils/filterObj.js");
+const Notice = require("../models/notice.model.js");
+const User = require("../models/user.model.js");
 
-export const createNewNotice = catchAsync(async (req, res, next) => {
+exports.createNewNotice = catchAsync(async (req, res, next) => {
   const noticeData = filterObj(
     req.body,
     "title",
@@ -31,7 +31,7 @@ export const createNewNotice = catchAsync(async (req, res, next) => {
   });
 });
 
-export const getAllNotices = catchAsync(async (req, res, next) => {
+exports.getAllNotices = catchAsync(async (req, res, next) => {
   const token = req.headers?.authorization?.split(" ")[1];
 
   let userRole = "anonymous";
@@ -69,7 +69,7 @@ export const getAllNotices = catchAsync(async (req, res, next) => {
   });
 });
 
-export const getNotice = catchAsync(async (req, res, next) => {
+exports.getNotice = catchAsync(async (req, res, next) => {
   const notice = await Notice.findById(req.params.noticeId).populate({
     path: "author",
     select: "name email",
@@ -88,7 +88,7 @@ export const getNotice = catchAsync(async (req, res, next) => {
   });
 });
 
-export const updateNotice = catchAsync(async (req, res, next) => {
+exports.updateNotice = catchAsync(async (req, res, next) => {
   const noticeData = filterObj(
     req.body,
     "title",
@@ -121,7 +121,7 @@ export const updateNotice = catchAsync(async (req, res, next) => {
   });
 });
 
-export const deleteNotice = catchAsync(async (req, res, next) => {
+exports.deleteNotice = catchAsync(async (req, res, next) => {
   const notice = await Notice.findByIdAndDelete(req.params.noticeId);
 
   if (!notice) {

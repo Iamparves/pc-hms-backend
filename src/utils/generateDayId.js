@@ -6,4 +6,4 @@ const generateDayId = (date) => {
   return `${year}${month}${day}`;
 };
 
-export default generateDayId;
+module.exports = generateDayId;

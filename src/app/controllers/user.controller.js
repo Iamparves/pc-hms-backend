@@ -1,10 +1,10 @@
-import AppError from "../../utils/appError.js";
-import catchAsync from "../../utils/catchAsync.js";
-import filterObj from "../../utils/filterObj.js";
-import Patient from "../models/patient.model.js";
-import User from "../models/user.model.js";
+const AppError = require("../../utils/appError.js");
+const catchAsync = require("../../utils/catchAsync.js");
+const filterObj = require("../../utils/filterObj.js");
+const Patient = require("../models/patient.model.js");
+const User = require("../models/user.model.js");
 
-export const getMe = catchAsync(async (req, res, next) => {
+exports.getMe = catchAsync(async (req, res, next) => {
   const user = await User.findById(req.user._id).populate({
     path: "profile",
     select: "-__v -createdAt -updatedAt",
@@ -18,7 +18,7 @@ export const getMe = catchAsync(async (req, res, next) => {
   });
 });
 
-export const updateMe = catchAsync(async (req, res, next) => {
+exports.updateMe = catchAsync(async (req, res, next) => {
   const filteredBody = filterObj(
     req.body,
     "name",
@@ -57,7 +57,7 @@ export const updateMe = catchAsync(async (req, res, next) => {
   });
 });
 
-export const createAdmin = catchAsync(async (req, res, next) => {
+exports.createAdmin = catchAsync(async (req, res, next) => {
   const filteredBody = filterObj(
     req.body,
     "name",
@@ -79,7 +79,7 @@ export const createAdmin = catchAsync(async (req, res, next) => {
   });
 });
 
-export const updateAdmin = catchAsync(async (req, res, next) => {
+exports.updateAdmin = catchAsync(async (req, res, next) => {
   const filteredBody = filterObj(req.body, "name", "email");
 
   const user = await User.findByIdAndUpdate(req.params.adminId, filteredBody, {
@@ -100,7 +100,7 @@ export const updateAdmin = catchAsync(async (req, res, next) => {
   });
 });
 
-export const getAdmins = catchAsync(async (req, res, next) => {
+exports.getAdmins = catchAsync(async (req, res, next) => {
   const admins = await User.find({ role: "admin" });
 
   return res.status(200).json({
@@ -112,7 +112,7 @@ export const getAdmins = catchAsync(async (req, res, next) => {
   });
 });
 
-export const deleteAdmin = catchAsync(async (req, res, next) => {
+exports.deleteAdmin = catchAsync(async (req, res, next) => {
   if (req.user._id === req.params.adminId) {
     return next(new AppError("You can't delete yourself", 400));
   }

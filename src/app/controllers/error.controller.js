@@ -1,5 +1,5 @@
-import config from "../../config/index.js";
-import AppError from "../../utils/appError.js";
+const config = require("../../config/index");
+const AppError = require("../../utils/appError");
 
 const handleCastErrorDB = (err) => {
   const message = `Invalid ${err.path}: ${err.value}.`;
@@ -51,9 +51,7 @@ const sendErrorProd = (err, res) => {
   }
 };
 
-const globalErrorHander = (err, req, res, next) => {
-  console.log(err); // REMOVE LATER
-
+const globalErrorHandler = (err, req, res, next) => {
   err.statusCode = err.statusCode || 500;
   err.status = err.status || "error";
 
@@ -77,4 +75,4 @@ const globalErrorHander = (err, req, res, next) => {
   }
 };
 
-export default globalErrorHander;
+module.exports = globalErrorHandler;

@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "description": "Backend for the Hospital Management System",
   "main": "src/server.js",
-  "type": "module",
   "engines": {
     "node": "18.x"
   },

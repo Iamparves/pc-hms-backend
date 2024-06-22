@@ -1,9 +1,9 @@
-import APIFeaturesQuery from "../../utils/apiFeaturesQuery.js";
-import AppError from "../../utils/appError.js";
-import catchAsync from "../../utils/catchAsync.js";
-import Comment from "../models/comment.model.js";
+const APIFeaturesQuery = require("../../utils/apiFeaturesQuery");
+const AppError = require("../../utils/appError");
+const catchAsync = require("../../utils/catchAsync");
+const Comment = require("../models/comment.model");
 
-export const createComment = catchAsync(async (req, res, next) => {
+exports.createComment = catchAsync(async (req, res, next) => {
   const commentData = {
     content: req.body.content,
     blog: req.body.blog,
@@ -21,7 +21,7 @@ export const createComment = catchAsync(async (req, res, next) => {
   });
 });
 
-export const getAllComments = catchAsync(async (req, res, next) => {
+exports.getAllComments = catchAsync(async (req, res, next) => {
   req.query.populate = "user:name";
 
   const features = new APIFeaturesQuery(Comment.find(), req.query)
@@ -42,7 +42,7 @@ export const getAllComments = catchAsync(async (req, res, next) => {
   });
 });
 
-export const getCommentsByBlog = catchAsync(async (req, res, next) => {
+exports.getCommentsByBlog = catchAsync(async (req, res, next) => {
   const comments = await Comment.find({
     blog: req.params.blogId,
   })
@@ -61,7 +61,7 @@ export const getCommentsByBlog = catchAsync(async (req, res, next) => {
   });
 });
 
-export const updateComment = catchAsync(async (req, res, next) => {
+exports.updateComment = catchAsync(async (req, res, next) => {
   const comment = await Comment.findById(req.params.commentId);
 
   if (!comment) {
@@ -96,7 +96,7 @@ export const updateComment = catchAsync(async (req, res, next) => {
   });
 });
 
-export const deleteComment = catchAsync(async (req, res, next) => {
+exports.deleteComment = catchAsync(async (req, res, next) => {
   const comment = await Comment.findById(req.params.commentId);
 
   if (!comment) {

@@ -1,6 +1,7 @@
-import express from "express";
-import { protect, restrictTo } from "../controllers/auth.controller.js";
-import {
+const express = require("express");
+const { protect, restrictTo } = require("../controllers/auth.controller.js");
+
+const {
   createNewBlog,
   deleteBlog,
   dislikeBlog,
@@ -10,7 +11,7 @@ import {
   getBlogReaction,
   likeBlog,
   updateBlog,
-} from "../controllers/blog.controller.js";
+} = require("../controllers/blog.controller.js");
 
 const blogRouter = express.Router();
 
@@ -31,4 +32,4 @@ blogRouter
   .patch(protect, restrictTo("admin", "hospital"), updateBlog)
   .delete(protect, restrictTo("admin", "hospital"), deleteBlog);
 
-export default blogRouter;
+module.exports = blogRouter;

@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+const mongoose = require("mongoose");
 
 class APIFeaturesAggregation {
   constructor(model, queryString) {
@@ -177,4 +177,4 @@ class APIFeaturesAggregation {
   }
 }
 
-export default APIFeaturesAggregation;
+module.exports = APIFeaturesAggregation;
